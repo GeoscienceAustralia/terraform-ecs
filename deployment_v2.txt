@@ -1,0 +1,1 @@
+ecs-cli compose --file docker-stack.yaml service up --target-group-arn arn:aws:elasticloadbalancing:ap-southeast-2:538673716275:targetgroup/acc-acc-default/49a3a19679f543ee --role /ecs/acc_ecs_lb_role --container-name web --container-port 80

@@ -8,12 +8,12 @@ private_subnet_cidrs = ["10.0.50.0/24", "10.0.51.0/24"]
 
 availibility_zones = ["ap-southeast-2a", "ap-southeast-2b"]
 
-max_size = 1
+max_size = 3
 
 min_size = 1
 
-desired_capacity = 1
+desired_capacity = 2
 
 instance_type = "t2.micro"
 
-ecs_aws_ami = "ami-95f8d2f3"
+ecs_aws_ami = "ami-c1a6bda2"

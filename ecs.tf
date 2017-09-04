@@ -1,3 +1,24 @@
+terraform {
+  required_version = ">= 0.10.0"
+
+  backend "s3" {
+    # This is an s3bucket you will need to create in your aws 
+    # space
+    bucket = "dea-devs-tfstate"
+
+    # The key should be unique to each stack, because we want to
+    # have multiple enviornments alongside each other we set
+    # this dynamically in the bitbucket-pipelines.yml with the
+    # --backend
+    key = "ecs-test/"
+
+    region = "ap-southeast-2"
+
+    # This is a DynamoDB table with the Primary Key set to LockID
+    dynamodb_table = "terraform"
+  }
+}
+
 provider "aws" {
   region = "ap-southeast-2"
 }
@@ -7,7 +28,7 @@ module "ecs" {
 
   environment          = "${var.environment}"
   cluster              = "${var.environment}"
-  cloudwatch_prefix    = "${var.environment}"           #See ecs_instances module when to set this and when not!
+  cloudwatch_prefix    = "${var.environment}"          #See ecs_instances module when to set this and when not!
   vpc_cidr             = "${var.vpc_cidr}"
   public_subnet_cidrs  = "${var.public_subnet_cidrs}"
   private_subnet_cidrs = "${var.private_subnet_cidrs}"
@@ -42,4 +63,8 @@ variable "availibility_zones" {
 
 output "default_alb_target_group" {
   value = "${module.ecs.default_alb_target_group}"
+}
+
+output "ecs_lb_role" {
+  value = "${module.ecs.ecs_lb_role}"
 }

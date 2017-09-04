@@ -8,6 +8,6 @@ variable "cluster" {
 }
 
 variable "prefix" {
-  default     = ""
+  default     = "ECS"
   description = "The prefix of the parameters this role should be able to access"
 }

@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "ap-southeast-2"
 }
 
 module "ecs" {
@@ -15,14 +15,9 @@ module "ecs" {
   max_size             = "${var.max_size}"
   min_size             = "${var.min_size}"
   desired_capacity     = "${var.desired_capacity}"
-  key_name             = "${aws_key_pair.ecs.key_name}"
+  key_name             = "ecs-cluster"
   instance_type        = "${var.instance_type}"
   ecs_aws_ami          = "${var.ecs_aws_ami}"
-}
-
-resource "aws_key_pair" "ecs" {
-  key_name   = "ecs-key-${var.environment}"
-  public_key = "INSERT_KEY_HERE"
 }
 
 variable "vpc_cidr" {}

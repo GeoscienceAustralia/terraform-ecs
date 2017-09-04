@@ -1,16 +1,16 @@
 {
-    "cluster": "test",
+    "cluster": "acc",
     "serviceName": "nginx",
-    "taskDefinition": "@@TASKDEFINITION_ARN@@",
+    "taskDefinition": @@TASKDEFINITION_ARN@@,
     "loadBalancers": [
         {
-            "targetGroupArn": "@@TARGET_GROUP_ARN@@",
+            "targetGroupArn": "arn:aws:elasticloadbalancing:ap-southeast-2:538673716275:targetgroup/acc-acc-default/f2bf4b20ceab9853",
             "containerName": "nginx",
             "containerPort": 80
         }
     ],
     "desiredCount": 1,
-    "role": "/ecs/test_ecs_lb_role",
+    "role": "/ecs/acc_ecs_lb_role",
     "deploymentConfiguration": {
         "maximumPercent": 100,
         "minimumHealthyPercent": 0

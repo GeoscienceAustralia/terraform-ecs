@@ -52,7 +52,7 @@ What are we creating:
 * In every availability zone we are creating a private and a public subnet with a /24 ip address range
   * Public subnet convention is 10.x.0.x and 10.x.1.x etc..
   * Private subnet convention is 10.x.50.x and 10.x.51.x etc..
-* In the public subnet we place a NAT gateway and the LoadBalancer
+* In the public subnet we place a NAT gateway the LoadBalancer is added here for each service we add to the cluster
 * The private subnets are used in the autoscale group which places instances in them
 * We create an ECS cluster where the instances connect to
 
@@ -66,7 +66,7 @@ Details regarding how a module works or why it is setup is described in the modu
 
 Modules need to be used to create infrastructure. For an example on how to use the modules to create a working ECS cluster see **ecs.tf** and **ecf.tfvars**.
 
-**Note:** You need to use Terraform version 0.9.5 and above
+**Note:** You need to use Terraform version 0.10.0 and above
 
 ### Conventions
 
@@ -84,20 +84,20 @@ These are the conventions we have in every module
 
 ## Create it
 
-To create a working ECS cluster from this repository see **ecs.tf** and **ecf.tfvars**.
+To create a working ECS cluster from this repository see **ecs.tf** and **terraform.tfvars**.
 
 Quick way to create this from the repository as is:
 
 ```bash
-terraform get && terraform apply -input=false -var-file=ecs.tfvars
+terraform init && terraform apply 
 ```
 
 Actual way for creating everything using the default terraform flow:
 
 ```bash
-terraform get
-terraform plan -input=false -var-file=ecs.tfvars
-terraform apply -input=false -var-file=ecs.tfvars
+terraform init
+terraform plan
+terraform apply
 ```
 
 ## Must know
@@ -128,7 +128,9 @@ Normally there is only one group of instances like configured in this repository
 
 ### LoadBalancer
 
-It is possible to use the Application LoadBalancer and the Classic LoadBalancer with this setup. The default configuration is Application LoadBalancer because that makes more sense in combination with ECS. There is also a concept of [Internal and External facing LoadBalancer](deployment/README.md#internal-vs-external)
+It is possible to use the Application LoadBalancer and the Classic LoadBalancer with this setup. The default configuration is Application LoadBalancer because that makes more sense in combination with ECS. 
+
+This is deployed as part of the services component, which is a seperate repo for a one-to-many relationship. [terraform ecs service repo](https://github.com/GeoscienceAustralia/terraform-ecs-service)
 
 ### Using default
 

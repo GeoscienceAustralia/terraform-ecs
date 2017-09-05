@@ -61,10 +61,6 @@ variable "availibility_zones" {
   type = "list"
 }
 
-output "default_alb_target_group" {
-  value = "${module.ecs.default_alb_target_group}"
-}
-
 output "ecs_lb_role" {
   value = "${module.ecs.ecs_lb_role}"
 }

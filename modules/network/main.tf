@@ -13,6 +13,7 @@ module "private_subnet" {
   vpc_id             = "${module.vpc.id}"
   cidrs              = "${var.private_subnet_cidrs}"
   availibility_zones = "${var.availibility_zones}"
+  tier               = "Private"
 }
 
 module "public_subnet" {
@@ -23,6 +24,7 @@ module "public_subnet" {
   vpc_id             = "${module.vpc.id}"
   cidrs              = "${var.public_subnet_cidrs}"
   availibility_zones = "${var.availibility_zones}"
+  tier               = "Public"
 }
 
 module "nat" {

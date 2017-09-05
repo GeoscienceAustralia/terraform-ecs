@@ -9,6 +9,7 @@ resource "aws_subnet" "subnet" {
   tags {
     Name        = "${var.name}_${element(var.availibility_zones, count.index)}"
     Environment = "${var.environment}"
+    Tier        = "${var.tier}"
   }
 }
 

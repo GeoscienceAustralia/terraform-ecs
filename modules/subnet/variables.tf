@@ -19,3 +19,7 @@ variable "availibility_zones" {
 variable "vpc_id" {
   description = "VPC id to place to subnet into"
 }
+
+variable "tier" {
+  description = "Public or Private"
+}

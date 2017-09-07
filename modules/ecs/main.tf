@@ -1,15 +1,42 @@
 module "network" {
   source               = "../network"
+
   environment          = "${var.environment}"
   vpc_cidr             = "${var.vpc_cidr}"
   public_subnet_cidrs  = "${var.public_subnet_cidrs}"
   private_subnet_cidrs = "${var.private_subnet_cidrs}"
-  availibility_zones   = "${var.availibility_zones}"
+  availability_zones   = "${var.availability_zones}"
+  owner                = "${var.owner}"
+  cluster              = "${var.cluster}"
   depends_id           = ""
 }
 
+module "rds" {
+  source             = "../rds"
+
+  cluster_name       = "${var.cluster}"
+  environment        = "${var.environment}"
+  vpc_id             = "${module.network.vpc_id}"
+  ecs_instance_sg_id = "${module.ecs_instances.ecs_instance_security_group_id}"
+  availability_zones = "${var.availability_zones}"
+  owner              = "${var.owner}"
+}
+
+module "jumpbox" {
+  source            = "../jumpbox"
+
+  cluster_name      = "${var.cluster}"
+  ssh_ip_address    = "${var.ssh_ip_address}"
+  vpc_id            = "${module.network.vpc_id}"
+  environment       = "${var.environment}"
+  enable_jumpbox    = "${var.enable_jumpbox}"
+  owner             = "${var.owner}"
+  key_name          = "${var.key_name}"
+  public_subnet_ids = "${module.network.public_subnet_ids}"
+}
+
 module "ecs_instances" {
-  source = "../ecs_instances"
+  source                  = "../ecs_instances"
 
   environment             = "${var.environment}"
   cluster                 = "${var.cluster}"
@@ -27,6 +54,7 @@ module "ecs_instances" {
   depends_id              = "${module.network.depends_id}"
   custom_userdata         = "${var.custom_userdata}"
   cloudwatch_prefix       = "${var.cloudwatch_prefix}"
+  owner                   = "${var.owner}"
 }
 
 resource "aws_ecs_cluster" "cluster" {

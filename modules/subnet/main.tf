@@ -3,11 +3,12 @@
 resource "aws_subnet" "subnet" {
   vpc_id            = "${var.vpc_id}"
   cidr_block        = "${element(var.cidrs, count.index)}"
-  availability_zone = "${element(var.availibility_zones, count.index)}"
+  availability_zone = "${element(var.availability_zones, count.index)}"
   count             = "${length(var.cidrs)}"
 
   tags {
-    Name        = "${var.name}_${element(var.availibility_zones, count.index)}"
+    Name        = "${var.name}_${element(var.availability_zones, count.index)}"
+    Owner       = "${var.owner}"
     Environment = "${var.environment}"
     Tier        = "${var.tier}"
   }
@@ -21,7 +22,8 @@ resource "aws_route_table" "subnet" {
   count  = "${length(var.cidrs)}"
 
   tags {
-    Name        = "${var.name}_${element(var.availibility_zones, count.index)}"
+    Name        = "${var.name}_${element(var.availability_zones, count.index)}"
+    Owner       = "${var.owner}"
     Environment = "${var.environment}"
   }
 }

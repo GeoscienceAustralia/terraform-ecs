@@ -1,31 +1,36 @@
 module "vpc" {
-  source = "../vpc"
+  source      = "../vpc"
 
   cidr        = "${var.vpc_cidr}"
   environment = "${var.environment}"
+  owner       = "${var.owner}"
+  cluster     = "${var.cluster}"
 }
 
 module "private_subnet" {
   source = "../subnet"
 
-  name               = "${var.environment}_private_subnet"
+  name               = "${var.cluster}-${var.environment}_private_subnet"
   environment        = "${var.environment}"
   vpc_id             = "${module.vpc.id}"
   cidrs              = "${var.private_subnet_cidrs}"
-  availibility_zones = "${var.availibility_zones}"
+  availability_zones = "${var.availability_zones}"
+  owner              = "${var.owner}"
   tier               = "Private"
 }
 
 module "public_subnet" {
   source = "../subnet"
 
-  name               = "${var.environment}_public_subnet"
+  name               = "${var.cluster}-${var.environment}_public_subnet"
   environment        = "${var.environment}"
   vpc_id             = "${module.vpc.id}"
   cidrs              = "${var.public_subnet_cidrs}"
-  availibility_zones = "${var.availibility_zones}"
+  availability_zones = "${var.availability_zones}"
+  owner              = "${var.owner}"
   tier               = "Public"
 }
+
 
 module "nat" {
   source = "../nat_gateway"

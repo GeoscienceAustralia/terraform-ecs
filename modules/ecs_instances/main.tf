@@ -1,6 +1,6 @@
 # You can have multiple ECS clusters in the same account with different resources.
 # Therefore all resources created here have the name containing the name of the:
-# environment, cluster name en the instance_group name.
+# environment, cluster name and the instance_group name.
 # That is also the reason why ecs_instances is a seperate module and not everything is created here.
 
 resource "aws_security_group" "instance" {
@@ -12,6 +12,7 @@ resource "aws_security_group" "instance" {
     Environment   = "${var.environment}"
     Cluster       = "${var.cluster}"
     InstanceGroup = "${var.instance_group}"
+    Owner         = "${var.owner}"
   }
 }
 
@@ -58,25 +59,31 @@ resource "aws_autoscaling_group" "asg" {
   tag {
     key                 = "Name"
     value               = "${var.environment}_ecs_${var.cluster}_${var.instance_group}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
   }
 
   tag {
     key                 = "Environment"
     value               = "${var.environment}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
   }
 
   tag {
     key                 = "Cluster"
     value               = "${var.cluster}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
   }
 
   tag {
     key                 = "InstanceGroup"
     value               = "${var.instance_group}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Owner"
+    value               = "${var.owner}"
+    propagate_at_launch = true
   }
 
   # EC2 instances require internet connectivity to boot. Thus EC2 instances must not start before NAT is available.
@@ -84,7 +91,7 @@ resource "aws_autoscaling_group" "asg" {
   tag {
     key                 = "DependsId"
     value               = "${var.depends_id}"
-    propagate_at_launch = "false"
+    propagate_at_launch = false
   }
 }
 

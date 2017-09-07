@@ -3,13 +3,13 @@ variable "environment" {
 }
 
 variable "cluster" {
-  default     = "default"
   description = "The name of the ECS cluster"
+  default     = "default"
 }
 
 variable "instance_group" {
-  default     = "default"
   description = "The name of the instances that you consider as a group"
+  default     = "default"
 }
 
 variable "vpc_cidr" {
@@ -17,24 +17,24 @@ variable "vpc_cidr" {
 }
 
 variable "private_subnet_cidrs" {
+  description = "List of private cidrs, for every availability zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = "list"
-  description = "List of private cidrs, for every avalibility zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
 }
 
 variable "public_subnet_cidrs" {
+  description = "List of public cidrs, for every availability zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = "list"
-  description = "List of public cidrs, for every avalibility zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
 }
 
 variable "load_balancers" {
+  description = "The load balancers to couple to the instances"
   type        = "list"
   default     = []
-  description = "The load balancers to couple to the instances"
 }
 
-variable "availibility_zones" {
+variable "availability_zones" {
+  description = "List of availability zones you want. Example: ap-southeast-2a, ap-southeast-2b"
   type        = "list"
-  description = "List of avalibility zones you want. Example: eu-west-1a and eu-west-1b"
 }
 
 variable "max_size" {
@@ -62,21 +62,33 @@ variable "ecs_aws_ami" {
 }
 
 variable "custom_userdata" {
-  default     = ""
   description = "Inject extra command in the instance template to be run on boot"
+  default     = ""
 }
 
 variable "ecs_config" {
-  default     = "echo '' > /etc/ecs/ecs.config"
   description = "Specify ecs configuration or get it from S3. Example: aws s3 cp s3://some-bucket/ecs.config /etc/ecs/ecs.config"
+  default     = "echo '' > /etc/ecs/ecs.config"
 }
 
 variable "ecs_logging" {
-  default     = "[\"json-file\",\"awslogs\"]"
   description = "Adding logging option to ECS that the Docker containers can use. It is possible to add fluentd as well"
+  default     = "[\"json-file\",\"awslogs\"]"
 }
 
 variable "cloudwatch_prefix" {
-  default     = ""
   description = "If you want to avoid cloudwatch collision or you don't want to merge all logs to one log group specify a prefix"
+  default     = ""
+}
+
+variable "owner" {
+  description = "Mailing list for owners"
+}
+
+variable "enable_jumpbox" {
+  description = "Boolean which enables the jumpbox"
+}
+
+variable "ssh_ip_address" {
+  description = "enables ssh access from specified ip address"
 }

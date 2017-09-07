@@ -24,9 +24,10 @@ resource "aws_security_group" "rds" {
   }
 
   tags {
-    Name         = "${var.cluster_name}-${var.environment}-ecs-rds-sg"
-    cluster_name = "${var.cluster_name}"
-    environment  = "${var.environment}"
-    created_by   = "terraform"
+    Name        = "${var.cluster_name}-${var.environment}-ecs-rds-sg"
+    Cluster     = "${var.cluster_name}"
+    Environment = "${var.environment}"
+    Created_by  = "terraform"
+    Owner       = "${var.owner}"
   }
 }

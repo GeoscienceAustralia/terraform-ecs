@@ -1,5 +1,5 @@
 module "vpc" {
-  source      = "../vpc"
+  source = "../vpc"
 
   cidr        = "${var.vpc_cidr}"
   environment = "${var.environment}"
@@ -30,7 +30,6 @@ module "public_subnet" {
   owner              = "${var.owner}"
   tier               = "Public"
 }
-
 
 module "nat" {
   source = "../nat_gateway"

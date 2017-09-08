@@ -47,7 +47,7 @@ module "ecs" {
   db_admin_username = "${var.db_admin_username}"
   db_admin_password = "${var.db_admin_password}"
 
-  jumpbox_ami = "{$var.jumpbox_ami}"
+  jumpbox_ami = "${data.aws_ami.jumpbox_ami.image_id}"
 }
 
 variable "cluster_name" {}

@@ -40,7 +40,7 @@ variable "engine_version" {
   description = "Engine version"
 
   default {
-    postgres = "9.6.5"
+    postgres = "9.6.3"
   }
 }
 

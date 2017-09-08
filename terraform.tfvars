@@ -22,4 +22,4 @@ ecs_aws_ami = "ami-c1a6bda2"
 
 owner = "alexander.vincent@ga.gov.au"
 
-enable_jumpbox = true
+enable_jumpbox = false

@@ -7,12 +7,12 @@
 #--------------------------------------------------------------
 
 variable "database_subnet_cidr" {
-  default       = ["10.0.21.0/24", "10.0.22.0/24", "10.0.23.0/24"]
-  description   = "List of subnets to be used for databases"
+  default     = ["10.0.21.0/24", "10.0.22.0/24", "10.0.23.0/24"]
+  description = "List of subnets to be used for databases"
 }
 
 variable "availability_zones" {
-  type          = "list"
+  type = "list"
 }
 
 variable "vpc_id" {}
@@ -22,46 +22,44 @@ variable "vpc_id" {}
 #--------------------------------------------------------------
 
 variable "identifier" {
-	default     = "mydb-rds"
-	description = "Identifier for your DB"
+  default     = "mydb-rds"
+  description = "Identifier for your DB"
 }
 
 variable "storage" {
-  default       = "180"
-  description   = "Storage size in GB"
+  default     = "180"
+  description = "Storage size in GB"
 }
 
 variable "engine" {
-  default       = "postgres"
-  description   = "Engine type: e.g. mysql, postgres"
+  default     = "postgres"
+  description = "Engine type: e.g. mysql, postgres"
 }
 
 variable "engine_version" {
-  description   = "Engine version"
+  description = "Engine version"
 
   default {
-    postgres    = "9.6.5"
+    postgres = "9.6.5"
   }
 }
 
 variable "instance_class" {
-  default       = "db.m4.xlarge"
-  description   = "aws instance"
+  default     = "db.m4.xlarge"
+  description = "aws instance"
 }
 
 variable "db_name" {
-  default       = "mydb"
-  description   = "Name of the first db"
+  default     = "mydb"
+  description = "Name of the first db"
 }
 
-variable "username" {
-  default       = "myuser"
-  description   = "User name"
+variable "db_admin_username" {
+  description = "Admin username for the database"
 }
 
-variable "password" {
-  default       = "Password123"
-  description   = "password should be provided by env variable"
+variable "db_admin_password" {
+  description = "password should be provided by env variable"
 }
 
 variable "rds_is_multi_az" {

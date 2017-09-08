@@ -7,7 +7,7 @@
 resource "aws_instance" "jumpbox" {
   count          = "${var.enable_jumpbox}"
 
-  ami            = "${var.jump_ami}"
+  ami            = "${var.jumpbox_ami}"
   instance_type  = "${var.jump_instance_type}"
 
   tags           = {

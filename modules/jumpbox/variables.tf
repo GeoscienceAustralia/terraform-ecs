@@ -11,9 +11,8 @@ variable "enable_jumpbox" {
   default     = false
 }
 
-variable "jump_ami" {
+variable "jumpbox_ami" {
   description = "AMI to be used for jumpbox"
-  default     = ""
 }
 
 variable "jump_instance_type" {

@@ -12,8 +12,8 @@ resource "aws_db_instance" "rds" {
   engine_version          = "${lookup(var.engine_version, var.engine)}"
   instance_class          = "${var.instance_class}"
   name                    = "${var.db_name}"
-  username                = "${var.username}"
-  password                = "${var.password}"
+  username                = "${var.db_admin_username}"
+  password                = "${var.db_admin_password}"
   vpc_security_group_ids  = ["${aws_security_group.rds.id}"]
   multi_az                = "${var.rds_is_multi_az}"
   db_subnet_group_name    = "${aws_db_subnet_group.rds-subnet.id}"
@@ -22,7 +22,7 @@ resource "aws_db_instance" "rds" {
   storage_encrypted       = "${var.storage_encrypted}"
 
   # only for dev/test builds
-  skip_final_snapshot     = true
+  skip_final_snapshot = true
 
   tags {
     Name        = "${var.cluster_name}_ecs_rds"

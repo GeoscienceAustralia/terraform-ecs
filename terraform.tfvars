@@ -1,8 +1,8 @@
 vpc_cidr = "10.0.0.0/16"
 
-vpc_name = "datacube-ecs"
+cluster_name = "datacube-ecs"
 
-environment = "acc"
+environment = "dev"
 
 public_subnet_cidrs = ["10.0.0.0/24", "10.0.1.0/24"]
 
@@ -21,7 +21,5 @@ instance_type = "t2.micro"
 ecs_aws_ami = "ami-c1a6bda2"
 
 owner = "alexander.vincent@ga.gov.au"
-
-ssh_ip_address = "192.104.44.129/32"
 
 enable_jumpbox = true

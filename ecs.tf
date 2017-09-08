@@ -27,8 +27,8 @@ module "ecs" {
   source = "modules/ecs"
 
   environment          = "${var.environment}"
-  cluster              = "${var.vpc_name}"
-  cloudwatch_prefix    = "${var.vpc_name}-${var.environment}"          #See ecs_instances module when to set this and when not!
+  cluster              = "${var.cluster_name}"
+  cloudwatch_prefix    = "${var.cluster_name}-${var.environment}" #See ecs_instances module when to set this and when not!
   vpc_cidr             = "${var.vpc_cidr}"
   public_subnet_cidrs  = "${var.public_subnet_cidrs}"
   private_subnet_cidrs = "${var.private_subnet_cidrs}"
@@ -43,9 +43,14 @@ module "ecs" {
   ssh_ip_address       = "${var.ssh_ip_address}"
   enable_jumpbox       = "${var.enable_jumpbox}"
   owner                = "${var.owner}"
+
+  db_admin_username = "${var.db_admin_username}"
+  db_admin_password = "${var.db_admin_password}"
+
+  jumpbox_ami = "{$var.jumpbox_ami}"
 }
 
-variable "vpc_name" {}
+variable "cluster_name" {}
 variable "vpc_cidr" {}
 variable "environment" {}
 variable "max_size" {}
@@ -71,4 +76,35 @@ variable "availability_zones" {
 
 output "ecs_lb_role" {
   value = "${module.ecs.ecs_lb_role}"
+}
+
+#--------------------------------------------------------------
+# Database parameters
+#--------------------------------------------------------------
+
+variable db_admin_username {
+  description = "the admin username for the rds instance"
+}
+
+variable db_admin_password {
+  description = "the admin password for the rds instance"
+}
+
+#--------------------------------------------------------------
+# Server Images
+#--------------------------------------------------------------
+
+data "aws_ami" "jumpbox_ami" {
+  most_recent = true
+  owners      = ["self"]
+
+  filter {
+    name   = "tag:application"
+    values = ["Jumpbox"]
+  }
+
+  filter {
+    name   = "tag:version"
+    values = ["${var.environment}"]
+  }
 }

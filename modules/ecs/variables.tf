@@ -89,6 +89,18 @@ variable "enable_jumpbox" {
   description = "Boolean which enables the jumpbox"
 }
 
+variable "jumpbox_ami" {
+  description = "ami for the jumpbox"
+}
+
 variable "ssh_ip_address" {
   description = "enables ssh access from specified ip address"
+}
+
+variable "db_admin_username" {
+  description = "the admin username for the RDS instance"
+}
+
+variable "db_admin_password" {
+  description = "the admin password for the RDS instance"
 }

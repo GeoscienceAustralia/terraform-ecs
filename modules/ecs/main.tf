@@ -1,5 +1,5 @@
 module "network" {
-  source               = "../network"
+  source = "../network"
 
   environment          = "${var.environment}"
   vpc_cidr             = "${var.vpc_cidr}"
@@ -12,7 +12,7 @@ module "network" {
 }
 
 module "rds" {
-  source             = "../rds"
+  source = "../rds"
 
   cluster_name       = "${var.cluster}"
   environment        = "${var.environment}"
@@ -20,10 +20,13 @@ module "rds" {
   ecs_instance_sg_id = "${module.ecs_instances.ecs_instance_security_group_id}"
   availability_zones = "${var.availability_zones}"
   owner              = "${var.owner}"
+
+  db_admin_username = "${var.db_admin_username}"
+  db_admin_password = "${var.db_admin_password}"
 }
 
 module "jumpbox" {
-  source            = "../jumpbox"
+  source = "../jumpbox"
 
   cluster_name      = "${var.cluster}"
   ssh_ip_address    = "${var.ssh_ip_address}"
@@ -33,10 +36,12 @@ module "jumpbox" {
   owner             = "${var.owner}"
   key_name          = "${var.key_name}"
   public_subnet_ids = "${module.network.public_subnet_ids}"
+
+  jumpbox_ami = "${var.jumpbox_ami}"
 }
 
 module "ecs_instances" {
-  source                  = "../ecs_instances"
+  source = "../ecs_instances"
 
   environment             = "${var.environment}"
   cluster                 = "${var.cluster}"

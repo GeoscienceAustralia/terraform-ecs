@@ -6,6 +6,7 @@ resource "aws_vpc" "vpc" {
     Name        = "${var.cluster}"
     Environment = "${var.environment}"
     Owner       = "${var.owner}"
+    Created_by  = "terraform"
   }
 }
 
@@ -16,5 +17,6 @@ resource "aws_internet_gateway" "vpc" {
     Name        = "${var.cluster}"
     Environment = "${var.environment}"
     Owner       = "${var.owner}"
+    Created_by  = "terraform"
   }
 }

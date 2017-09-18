@@ -11,11 +11,12 @@ resource "aws_subnet" "subnet" {
     Owner       = "${var.owner}"
     Environment = "${var.environment}"
     Tier        = "${var.tier}"
+    Created_by  = "terraform"
   }
 }
 
 # We are creating one more subnets that we want to address as one, therefore we create a routing table and 
-# add all the subnets to it. This allows us to easier create routing to all the subnets at once.
+# add all the subnets to it. This allows us to more easily create routing to all the subnets at once.
 # For example when creating a route to the Internet Gateway 
 resource "aws_route_table" "subnet" {
   vpc_id = "${var.vpc_id}"
@@ -25,6 +26,7 @@ resource "aws_route_table" "subnet" {
     Name        = "${var.name}_${element(var.availability_zones, count.index)}"
     Owner       = "${var.owner}"
     Environment = "${var.environment}"
+    Created_by  = "terraform"
   }
 }
 

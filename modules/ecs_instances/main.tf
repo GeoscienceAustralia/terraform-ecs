@@ -8,11 +8,20 @@ resource "aws_security_group" "instance" {
   description = "Used in ${var.environment}"
   vpc_id      = "${var.vpc_id}"
 
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = ["${var.jump_ssh_sg_id}"]
+  }
+
   tags {
+    Name          = "ecs_instance_sg"
     Environment   = "${var.environment}"
     Cluster       = "${var.cluster}"
     InstanceGroup = "${var.instance_group}"
     Owner         = "${var.owner}"
+    Created_by    = "terraform"
   }
 }
 
@@ -89,9 +98,15 @@ resource "aws_autoscaling_group" "asg" {
   # EC2 instances require internet connectivity to boot. Thus EC2 instances must not start before NAT is available.
   # For info why see description in the network module.
   tag {
-    key                 = "DependsId"
+    key                 = "Depends_id"
     value               = "${var.depends_id}"
     propagate_at_launch = false
+  }
+
+  tag {
+    key                 = "Created_by"
+    value               = "terraform"
+    propagate_at_launch = true
   }
 }
 

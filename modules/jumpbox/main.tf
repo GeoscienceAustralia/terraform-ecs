@@ -5,12 +5,12 @@
 # Create a jumpbox so we can have ssh access to the app server
 
 resource "aws_instance" "jumpbox" {
-  count          = "${var.enable_jumpbox}"
+  count = "${var.enable_jumpbox}"
 
-  ami            = "${var.jumpbox_ami}"
-  instance_type  = "${var.jump_instance_type}"
+  ami           = "${var.jumpbox_ami}"
+  instance_type = "${var.jump_instance_type}"
 
-  tags           = {
+  tags = {
     Name        = "${var.cluster_name}-${var.environment}-jumpbox"
     Owner       = "${var.owner}"
     Cluster     = "${var.cluster_name}"
@@ -25,7 +25,7 @@ resource "aws_instance" "jumpbox" {
 }
 
 resource "aws_eip" "jump" {
-  count    = "${var.enable_jumpbox}"
+  count = "${var.enable_jumpbox}"
 
   instance = "${aws_instance.jumpbox.id}"
   vpc      = true

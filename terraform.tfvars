@@ -1,6 +1,6 @@
 vpc_cidr = "10.0.0.0/16"
 
-cluster_name = "datacube-ecs"
+cluster_name = "test-ecs"
 
 environment = "dev"
 
@@ -16,10 +16,10 @@ min_size = 1
 
 desired_capacity = 2
 
-instance_type = "t2.micro"
+instance_type = "t2.small"
 
 ecs_aws_ami = "ami-c1a6bda2"
 
-owner = "alexander.vincent@ga.gov.au"
+owner = "YOUR_EMAIL_ADDRESS"
 
 enable_jumpbox = false

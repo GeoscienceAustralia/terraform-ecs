@@ -93,6 +93,10 @@ variable "ecs_instance_sg_id" {
   description = "Security group id for containers"
 }
 
+variable "jump_ssh_sg_id" {
+  description = "Security group id for the jumpbox"
+}
+
 #--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------

@@ -1,6 +1,6 @@
 vpc_cidr = "10.0.0.0/16"
 
-cluster_name = "test-ecs"
+cluster_name = "datacube-ecs"
 
 environment = "dev"
 
@@ -20,6 +20,11 @@ instance_type = "t2.small"
 
 ecs_aws_ami = "ami-c1a6bda2"
 
-owner = "YOUR_EMAIL_ADDRESS"
+owner = "alexander.vincent@ga.gov.au"
 
-enable_jumpbox = false
+enable_jumpbox = true
+
+db_admin_username = "supersecretuser"
+db_admin_password = "sup3rs3cr3tP4ssw0rd"
+ssh_ip_address = "192.104.44.129/32"
+#ssh_ip_address = "1.144.97.243/32"

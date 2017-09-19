@@ -20,11 +20,7 @@ instance_type = "t2.small"
 
 ecs_aws_ami = "ami-c1a6bda2"
 
-owner = "alexander.vincent@ga.gov.au"
+owner = "UNKNOWN"
 
-enable_jumpbox = true
+enable_jumpbox = false
 
-db_admin_username = "supersecretuser"
-db_admin_password = "sup3rs3cr3tP4ssw0rd"
-ssh_ip_address = "192.104.44.129/32"
-#ssh_ip_address = "1.144.97.243/32"

@@ -82,3 +82,10 @@ variable "ecs_logging" {
   default     = "[\"json-file\",\"awslogs\"]"
   description = "Adding logging option to ECS that the Docker containers can use. It is possible to add fluentd as well"
 }
+
+variable "jump_ssh_sg_id" {
+  description = "jumpbox security group to allow access to the container runners"
+  default     = ""
+}
+
+variable "owner" {}

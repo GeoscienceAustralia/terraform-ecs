@@ -1,6 +1,6 @@
 # You can have multiple ECS clusters in the same account with different resources.
 # Therefore all resources created here have the name containing the name of the:
-# environment, cluster name en the instance_group name.
+# environment, cluster name and the instance_group name.
 # That is also the reason why ecs_instances is a seperate module and not everything is created here.
 
 resource "aws_security_group" "instance" {
@@ -8,10 +8,20 @@ resource "aws_security_group" "instance" {
   description = "Used in ${var.environment}"
   vpc_id      = "${var.vpc_id}"
 
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = ["${var.jump_ssh_sg_id}"]
+  }
+
   tags {
+    Name          = "ecs_instance_sg"
     Environment   = "${var.environment}"
     Cluster       = "${var.cluster}"
     InstanceGroup = "${var.instance_group}"
+    Owner         = "${var.owner}"
+    Created_by    = "terraform"
   }
 }
 
@@ -58,33 +68,45 @@ resource "aws_autoscaling_group" "asg" {
   tag {
     key                 = "Name"
     value               = "${var.environment}_ecs_${var.cluster}_${var.instance_group}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
   }
 
   tag {
     key                 = "Environment"
     value               = "${var.environment}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
   }
 
   tag {
     key                 = "Cluster"
     value               = "${var.cluster}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
   }
 
   tag {
     key                 = "InstanceGroup"
     value               = "${var.instance_group}"
-    propagate_at_launch = "true"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Owner"
+    value               = "${var.owner}"
+    propagate_at_launch = true
   }
 
   # EC2 instances require internet connectivity to boot. Thus EC2 instances must not start before NAT is available.
   # For info why see description in the network module.
   tag {
-    key                 = "DependsId"
+    key                 = "Depends_id"
     value               = "${var.depends_id}"
-    propagate_at_launch = "false"
+    propagate_at_launch = false
+  }
+
+  tag {
+    key                 = "Created_by"
+    value               = "terraform"
+    propagate_at_launch = true
   }
 }
 

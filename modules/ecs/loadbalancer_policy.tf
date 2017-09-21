@@ -18,11 +18,11 @@ resource "aws_iam_role" "ecs_lb_role" {
 EOF
 }
 
-output "ecs_lb_role" {
-  value = "${aws_iam_role.ecs_lb_role.id}"
-}
-
 resource "aws_iam_role_policy_attachment" "ecs_lb" {
   role       = "${aws_iam_role.ecs_lb_role.id}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+}
+
+output "ecs_lb_role" {
+  value = "${aws_iam_role.ecs_lb_role.id}"
 }

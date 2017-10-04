@@ -26,4 +26,3 @@ enable_jumpbox = false
 
 key_name = "YOUR SSH KEY HERE"
 
-ssh_ip_address = "192.104.44.129/32"

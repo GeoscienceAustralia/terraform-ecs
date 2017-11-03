@@ -12,10 +12,10 @@ resource "aws_subnet" "database" {
   availability_zone = "${element(var.availability_zones, count.index)}"
 
   tags {
-    Name        = "${var.cluster}-database-subnet-${var.environment}-${element(var.availability_zones, count.index)}"
-    Cluster     = "${var.cluster}"
-    Environment = "${var.environment}"
-    Created_by  = "terraform"
-    Owner       = "${var.owner}"
+    Name       = "${var.cluster}-database-subnet-${var.workspace}-${element(var.availability_zones, count.index)}"
+    Cluster    = "${var.cluster}"
+    Workspace  = "${var.workspace}"
+    Created_by = "terraform"
+    Owner      = "${var.owner}"
   }
 }

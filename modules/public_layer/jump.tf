@@ -11,11 +11,11 @@ resource "aws_instance" "jumpbox" {
   instance_type = "${var.jump_instance_type}"
 
   tags = {
-    Name        = "${var.cluster}-${var.environment}-jumpbox"
-    Owner       = "${var.owner}"
-    Cluster     = "${var.cluster}"
-    Environment = "${var.environment}"
-    Created_by  = "terraform"
+    Name       = "${var.cluster}-${var.workspace}-jumpbox"
+    Owner      = "${var.owner}"
+    Cluster    = "${var.cluster}"
+    Workspace  = "${var.workspace}"
+    Created_by = "terraform"
   }
 
   subnet_id                   = "${element(module.public_subnet.ids, 0)}"

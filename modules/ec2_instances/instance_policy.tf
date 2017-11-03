@@ -20,12 +20,12 @@ data "aws_iam_policy_document" "assume_ec2_role" {
 # Some other ECS policy examples http://docs.aws.amazon.com/AmazonECS/latest/developerguide/IAMPolicyExamples.html 
 
 resource "aws_iam_role" "ecs_instance_role" {
-  name               = "${var.environment}_ecs_instance_role"
+  name               = "${var.workspace}_ecs_instance_role"
   assume_role_policy = "${data.aws_iam_policy_document.assume_ec2_role.json}"
 }
 
 resource "aws_iam_instance_profile" "ecs" {
-  name = "${var.environment}_ecs_instance_profile"
+  name = "${var.workspace}_ecs_instance_profile"
   path = "/"
   role = "${aws_iam_role.ecs_instance_role.name}"
 }

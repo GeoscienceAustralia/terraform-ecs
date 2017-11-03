@@ -5,7 +5,7 @@
 # Create a subnet group and rds
 
 resource "aws_db_instance" "rds" {
-  identifier = "${var.cluster}-${var.environment}-${var.identifier}"
+  identifier = "${var.cluster}-${var.workspace}-${var.identifier}"
 
   # Instance parameters
   allocated_storage      = "${var.storage}"
@@ -33,24 +33,24 @@ resource "aws_db_instance" "rds" {
   skip_final_snapshot = true
 
   tags {
-    Name        = "${var.cluster}_ecs_rds"
-    Cluster     = "${var.cluster}"
-    Environment = "${var.environment}"
-    Owner       = "${var.owner}"
-    Created_by  = "terraform"
+    Name       = "${var.cluster}_ecs_rds"
+    Cluster    = "${var.cluster}"
+    Workspace  = "${var.workspace}"
+    Owner      = "${var.owner}"
+    Created_by = "terraform"
   }
 }
 
 resource "aws_db_subnet_group" "rds-subnet" {
-  name        = "${var.cluster}_${var.environment}_rds_subnet_group"
+  name        = "${var.cluster}_${var.workspace}_rds_subnet_group"
   description = "${var.cluster} RDS Subnet Group"
   subnet_ids  = ["${aws_subnet.database.*.id}"]
 
   tags {
-    Name        = "${var.cluster}_${var.environment}_ecs_rds_subnet_group"
-    Cluster     = "${var.cluster}"
-    Environment = "${var.environment}"
-    Owner       = "${var.owner}"
-    Created_by  = "terraform"
+    Name       = "${var.cluster}_${var.workspace}_ecs_rds_subnet_group"
+    Cluster    = "${var.cluster}"
+    Workspace  = "${var.workspace}"
+    Owner      = "${var.owner}"
+    Created_by = "terraform"
   }
 }

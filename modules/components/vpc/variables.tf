@@ -15,9 +15,9 @@ variable "cluster" {
 }
 
 variable "owner" {
-  description = "Contact mailing list for the environment"
+  description = "Contact mailing list for the workspace"
 }
 
-variable "environment" {
-  description = "The name of the environment"
+variable "workspace" {
+  description = "The name of the workspace"
 }

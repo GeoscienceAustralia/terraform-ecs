@@ -63,6 +63,6 @@ variable "key_name" {}
 
 variable "cluster" {}
 
-variable "environment" {}
+variable "workspace" {}
 
 variable "owner" {}

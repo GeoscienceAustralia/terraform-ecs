@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "assume_ec2_role" {
 }
 
 resource "aws_iam_role" "ecs_lb_role" {
-  name = "${var.environment}_ecs_lb_role"
+  name = "${var.workspace}_ecs_lb_role"
   path = "/ecs/"
 
   assume_role_policy = "${data.aws_iam_policy_document.assume_ec2_role.json}"

@@ -26,7 +26,7 @@ This repository contains the Terraform modules for creating a production ready E
 * In order to use the jumpbox in this repo you will require a Jumpbox AMI in your amazon region
   * The jumpbox AMI is identified through ownership by the same account tagged with:
     * "application" = "Jumpbox"
-    * "version" = "{{environment}}" (dev/test/prod)
+    * "version" = "{{workspace}}" (dev/test/prod)
   * Setting environment variables to be injected into the script
     * ```TF_VAR_ssh_ip_address``` will restrict ssh access to the jumpbox to this ip address if the jumpbox is enabled
     * ```TF_db_admin_username``` will set the admin username of the rds to this variable
@@ -89,7 +89,7 @@ These are the conventions we have in every module
 * If main.tf is too big we create more *.tf files with proper names
 * [Optional] Contains outputs.tf with the output parameters
 * [Optional] Contains variables.tf which sets required attributes
-* For grouping in AWS we set the tag "Environment" everywhere where possible
+* For grouping in AWS we set the tag "Workspace" everywhere where possible
 
 ### Module structure
 
@@ -117,7 +117,7 @@ terraform apply
 
 ### SSH access to the instances
 
-You should not put your ECS instances directly on the internet. You should not allow SSH access to the instances directly but use a bastion server for that. Having SSH access to the acceptance environment is fine but you should not allow SSH access to production instances. You don't want to make any manual changes in the production environment.
+You should not put your ECS instances directly on the internet. You should not allow SSH access to the instances directly but use a bastion server for that. Having SSH access to the acceptance workspace is fine but you should not allow SSH access to production instances. You don't want to make any manual changes in the production workspace.
 
 This ECS module allows you to use an AWS SSH key to be able to access the instances, for quick usage purposes the ecs.tf creates a new AWS SSH key. The private key can be found in the root of this repository with the name 'ecs_fake_private'
 
@@ -147,7 +147,7 @@ This is deployed as part of the services component, which is a seperate repo for
 
 ### Using default
 
-The philosophy is that the modules should provide as much as possible of sane defaults. That way when using the modules it is possible to quickly configure them but still change when needed. That is also why we introduced something like a name 'default' as the default value for some of the components. Another reason behind it is that you don't need to come up with names when you probably might only have one cluster in your environment.
+The philosophy is that the modules should provide as much as possible of sane defaults. That way when using the modules it is possible to quickly configure them but still change when needed. That is also why we introduced something like a name 'default' as the default value for some of the components. Another reason behind it is that you don't need to come up with names when you probably might only have one cluster in your workspace.
 
 Looking at [ecs.tf](ecs.tf) might give you a different impression, but there we configure more things than needed to show it can be done.
 

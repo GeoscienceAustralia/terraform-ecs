@@ -6,12 +6,12 @@
 
 # You can have multiple ECS clusters in the same account with different resources.
 # Therefore all resources created here have the name containing the name of the:
-# environment, cluster name and the instance_group name.
+# workspace, cluster name and the instance_group name.
 # That is also the reason why ecs_instances is a seperate module and not everything is created here.
 
 resource "aws_security_group" "instance" {
-  name        = "${var.environment}_${var.cluster}_${var.instance_group}"
-  description = "Used in ${var.environment}"
+  name        = "${var.workspace}_${var.cluster}_${var.instance_group}"
+  description = "Used in ${var.workspace}"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -23,7 +23,7 @@ resource "aws_security_group" "instance" {
 
   tags {
     Name          = "ecs_instance_sg"
-    Environment   = "${var.environment}"
+    Workspace     = "${var.workspace}"
     Cluster       = "${var.cluster}"
     InstanceGroup = "${var.instance_group}"
     Owner         = "${var.owner}"
@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "outbound_internet_access" {
 
 # Default disk size for Docker is 22 gig, see http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
 resource "aws_launch_configuration" "launch" {
-  name_prefix          = "${var.environment}_${var.cluster}_${var.instance_group}_"
+  name_prefix          = "${var.workspace}_${var.cluster}_${var.instance_group}_"
   image_id             = "${var.aws_ami}"
   instance_type        = "${var.instance_type}"
   security_groups      = ["${aws_security_group.instance.id}"]
@@ -63,7 +63,7 @@ resource "aws_launch_configuration" "launch" {
 # Instances are scaled across availability zones http://docs.aws.amazon.com/autoscaling/latest/userguide/auto-scaling-benefits.html 
 # Do not use the load_balancers parameters here as it will overwrite service lbs from registering with the asg
 resource "aws_autoscaling_group" "asg" {
-  name                 = "${var.environment}_${var.cluster}_${var.instance_group}"
+  name                 = "${var.workspace}_${var.cluster}_${var.instance_group}"
   max_size             = "${var.max_size}"
   min_size             = "${var.min_size}"
   desired_capacity     = "${var.desired_capacity}"
@@ -73,13 +73,13 @@ resource "aws_autoscaling_group" "asg" {
 
   tag {
     key                 = "Name"
-    value               = "${var.environment}_ecs_${var.cluster}_${var.instance_group}"
+    value               = "${var.workspace}_ecs_${var.cluster}_${var.instance_group}"
     propagate_at_launch = true
   }
 
   tag {
-    key                 = "Environment"
-    value               = "${var.environment}"
+    key                 = "Workspace"
+    value               = "${var.workspace}"
     propagate_at_launch = true
   }
 
@@ -123,7 +123,7 @@ data "template_file" "user_data" {
     ecs_config        = "${var.ecs_config}"
     ecs_logging       = "${var.ecs_logging}"
     cluster_name      = "${var.cluster}"
-    env_name          = "${var.environment}"
+    env_name          = "${var.workspace}"
     custom_userdata   = "${var.custom_userdata}"
     cloudwatch_prefix = "${var.cloudwatch_prefix}"
   }

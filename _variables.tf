@@ -98,8 +98,8 @@ variable "owner" {
   description = "Mailing list for owners"
 }
 
-variable "environment" {
-  description = "The name of the environment"
+variable "workspace" {
+  description = "The name of the workspace"
 }
 
 variable "cluster" {
@@ -134,6 +134,6 @@ data "aws_ami" "jumpbox_ami" {
 
   filter {
     name   = "tag:version"
-    values = ["${var.environment}"]
+    values = ["${var.workspace}"]
   }
 }

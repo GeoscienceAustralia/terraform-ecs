@@ -115,6 +115,6 @@ variable "cluster" {
   description = "The name of the cluster"
 }
 
-variable "environment" {
-  description = "The name of the environment"
+variable "workspace" {
+  description = "The name of the workspace"
 }

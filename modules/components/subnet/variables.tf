@@ -32,8 +32,8 @@ variable "owner" {
   description = "Mailing list for the resource"
 }
 
-variable "environment" {
-  description = "The name of the environment"
+variable "workspace" {
+  description = "The name of the workspace"
 }
 
 variable "tier" {

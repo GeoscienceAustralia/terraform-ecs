@@ -7,15 +7,15 @@
 module "public_subnet" {
   source = "../components/subnet"
 
-  name               = "${var.cluster}-${var.environment}_public_subnet"
+  name               = "${var.cluster}-${var.workspace}_public_subnet"
   vpc_id             = "${var.vpc_id}"
   cidrs              = "${var.public_subnet_cidrs}"
   availability_zones = "${var.availability_zones}"
 
   # Tags
-  environment = "${var.environment}"
-  owner       = "${var.owner}"
-  tier        = "Public"
+  Workspace = "${var.workspace}"
+  Owner     = "${var.owner}"
+  Tier      = "Public"
 }
 
 resource "aws_route" "public_igw_route" {

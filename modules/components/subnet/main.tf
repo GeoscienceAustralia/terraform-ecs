@@ -11,11 +11,11 @@ resource "aws_subnet" "subnet" {
   count             = "${length(var.cidrs)}"
 
   tags {
-    Name        = "${var.name}_${element(var.availability_zones, count.index)}"
-    Owner       = "${var.owner}"
-    Environment = "${var.environment}"
-    Tier        = "${var.tier}"
-    Created_by  = "terraform"
+    Name       = "${var.name}_${element(var.availability_zones, count.index)}"
+    Owner      = "${var.owner}"
+    Workspace  = "${var.workspace}"
+    Tier       = "${var.tier}"
+    Created_by = "terraform"
   }
 }
 
@@ -27,10 +27,10 @@ resource "aws_route_table" "subnet" {
   count  = "${length(var.cidrs)}"
 
   tags {
-    Name        = "${var.name}_${element(var.availability_zones, count.index)}"
-    Owner       = "${var.owner}"
-    Environment = "${var.environment}"
-    Created_by  = "terraform"
+    Name       = "${var.name}_${element(var.availability_zones, count.index)}"
+    Owner      = "${var.owner}"
+    Workspace  = "${var.workspace}"
+    Created_by = "terraform"
   }
 }
 

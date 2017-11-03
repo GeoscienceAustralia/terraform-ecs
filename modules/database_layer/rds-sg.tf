@@ -5,7 +5,7 @@
 # Security groups for the RDS.
 
 resource "aws_security_group" "rds" {
-  name        = "${var.cluster}_${var.environment}_ecs_rds_sg"
+  name        = "${var.cluster}_${var.workspace}_ecs_rds_sg"
   description = "allow traffic from the instance sg"
   vpc_id      = "${var.vpc_id}"
 
@@ -17,11 +17,11 @@ resource "aws_security_group" "rds" {
   }
 
   tags {
-    Name        = "ecs-rds-sg"
-    Cluster     = "${var.cluster}"
-    Environment = "${var.environment}"
-    Owner       = "${var.owner}"
-    Created_by  = "terraform"
+    Name       = "ecs-rds-sg"
+    Cluster    = "${var.cluster}"
+    Workspace  = "${var.workspace}"
+    Owner      = "${var.owner}"
+    Created_by = "terraform"
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_security_group" "rds" {
 # More info: http://docs.aws.amazon.com/lambda/latest/dg/vpc.html
 
 resource "aws_security_group" "lambda_sg" {
-  name        = "${var.cluster}_${var.environment}_lambda_rds_sg"
+  name        = "${var.cluster}_${var.workspace}_lambda_rds_sg"
   description = "Allows traffic from lambda"
   vpc_id      = "${var.vpc_id}"
 
@@ -42,10 +42,10 @@ resource "aws_security_group" "lambda_sg" {
   }
 
   tags {
-    Name        = "${var.cluster}-lambda-sg"
-    Cluster     = "${var.cluster}"
-    Environment = "${var.environment}"
-    Owner       = "${var.owner}"
-    Created_by  = "terraform"
+    Name       = "${var.cluster}-lambda-sg"
+    Cluster    = "${var.cluster}"
+    Workspace  = "${var.workspace}"
+    Owner      = "${var.owner}"
+    Created_by = "terraform"
   }
 }

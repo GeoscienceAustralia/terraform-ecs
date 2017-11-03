@@ -96,7 +96,7 @@ variable "ssm_prefix" {
 
 variable "ssm_overwrite" {
   description = "If true any existing parameters will be overwritten"
-  default     = "false"
+  default     = "true"
 }
 
 variable "ssm_dbname_ref" {
@@ -137,6 +137,6 @@ variable "jump_ssh_sg_id" {
 
 variable "cluster" {}
 
-variable "environment" {}
+variable "workspace" {}
 
 variable "owner" {}

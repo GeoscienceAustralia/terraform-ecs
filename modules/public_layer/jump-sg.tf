@@ -25,10 +25,10 @@ resource "aws_security_group" "jump_ssh_sg" {
   vpc_id = "${var.vpc_id}"
 
   tags {
-    Name        = "${var.cluster}-${var.environment}-jump_ssh"
-    Owner       = "${var.owner}"
-    Cluster     = "${var.cluster}"
-    Environment = "${var.environment}"
-    Created_by  = "terraform"
+    Name       = "${var.cluster}-${var.workspace}-jump_ssh"
+    Owner      = "${var.owner}"
+    Cluster    = "${var.cluster}"
+    Workspace  = "${var.workspace}"
+    Created_by = "terraform"
   }
 }

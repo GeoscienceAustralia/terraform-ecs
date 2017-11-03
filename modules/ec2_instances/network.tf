@@ -7,15 +7,15 @@
 module "private_subnet" {
   source = "../components/subnet"
 
-  name               = "${var.cluster}-${var.environment}_private_subnet"
+  name               = "${var.cluster}-${var.workspace}_private_subnet"
   vpc_id             = "${var.vpc_id}"
   cidrs              = "${var.private_subnet_cidrs}"
   availability_zones = "${var.availability_zones}"
 
   # Tags
-  owner       = "${var.owner}"
-  environment = "${var.environment}"
-  tier        = "Private"
+  Owner     = "${var.owner}"
+  Workspace = "${var.workspace}"
+  Tier      = "Private"
 }
 
 resource "aws_route" "private_nat_route" {

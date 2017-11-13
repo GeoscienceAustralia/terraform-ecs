@@ -1,8 +1,8 @@
 vpc_cidr = "10.0.0.0/16"
 
-cluster_name = "datacube-ecs"
+cluster_name = "test-ecs"
 
-environment = "dev"
+workspace = "dev"
 
 public_subnet_cidrs = ["10.0.0.0/24", "10.0.1.0/24"]
 
@@ -20,7 +20,9 @@ instance_type = "t2.small"
 
 ecs_aws_ami = "ami-c1a6bda2"
 
-owner = "UNKNOWN"
+owner = "YOUR EMAIL HERE"
 
 enable_jumpbox = false
+
+key_name = "AWS KEYNAME HERE"
 

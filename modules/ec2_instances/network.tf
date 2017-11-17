@@ -13,9 +13,9 @@ module "private_subnet" {
   availability_zones = "${var.availability_zones}"
 
   # Tags
-  Owner     = "${var.owner}"
-  Workspace = "${var.workspace}"
-  Tier      = "Private"
+  owner     = "${var.owner}"
+  workspace = "${var.workspace}"
+  tier      = "Private"
 }
 
 resource "aws_route" "private_nat_route" {

@@ -13,9 +13,9 @@ module "public_subnet" {
   availability_zones = "${var.availability_zones}"
 
   # Tags
-  Workspace = "${var.workspace}"
-  Owner     = "${var.owner}"
-  Tier      = "Public"
+  workspace = "${var.workspace}"
+  owner     = "${var.owner}"
+  tier      = "Public"
 }
 
 resource "aws_route" "public_igw_route" {

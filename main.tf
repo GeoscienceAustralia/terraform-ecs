@@ -33,9 +33,9 @@ module "vpc" {
   cidr = "${var.vpc_cidr}"
 
   # Tags
-  environment = "${var.environment}"
-  owner       = "${var.owner}"
-  cluster     = "${var.cluster}"
+  workspace = "${var.workspace}"
+  owner     = "${var.owner}"
+  cluster   = "${var.cluster}"
 }
 
 module "public" {
@@ -55,9 +55,9 @@ module "public" {
   enable_jumpbox = "${var.enable_jumpbox}"
 
   # Tags
-  owner       = "${var.owner}"
-  cluster     = "${var.cluster}"
-  environment = "${var.environment}"
+  owner     = "${var.owner}"
+  cluster   = "${var.cluster}"
+  workspace = "${var.workspace}"
 }
 
 module "database" {
@@ -74,9 +74,9 @@ module "database" {
   db_admin_password = "${var.db_admin_password}"
 
   # Tags
-  owner       = "${var.owner}"
-  cluster     = "${var.cluster}"
-  environment = "${var.environment}"
+  owner     = "${var.owner}"
+  cluster   = "${var.cluster}"
+  workspace = "${var.workspace}"
 }
 
 module "ec2_instances" {
@@ -104,7 +104,7 @@ module "ec2_instances" {
   depends_id = "${module.public.nat_complete}"
 
   # Tags
-  owner       = "${var.owner}"
-  cluster     = "${var.cluster}"
-  environment = "${var.environment}"
+  owner     = "${var.owner}"
+  cluster   = "${var.cluster}"
+  workspace = "${var.workspace}"
 }

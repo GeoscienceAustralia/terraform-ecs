@@ -123,17 +123,35 @@ variable db_admin_password {
 # Server Images
 #--------------------------------------------------------------
 
+# Use this if you want to customise your jumpbox server image
+
+# data "aws_ami" "jumpbox_ami" {
+#   most_recent = true
+#   owners      = ["self"]
+#
+#   filter {
+#     name   = "tag:application"
+#     values = ["Jumpbox"]
+#   }
+#
+#   filter {
+#     name   = "tag:version"
+#     values = ["${var.workspace}"]
+#   }
+# }
+
 data "aws_ami" "jumpbox_ami" {
   most_recent = true
-  owners      = ["self"]
 
   filter {
-    name   = "tag:application"
-    values = ["Jumpbox"]
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
 
   filter {
-    name   = "tag:version"
-    values = ["${var.workspace}"]
+    name   = "virtualization-type"
+    values = ["hvm"]
   }
+
+  owners = ["099720109477"] # Canonical
 }

@@ -1,3 +1,7 @@
+variable "aws_region" {
+  default = "ap-southeast-2"
+}
+
 #--------------------------------------------------------------
 # Networking
 #--------------------------------------------------------------
@@ -154,4 +158,38 @@ data "aws_ami" "jumpbox_ami" {
   }
 
   owners = ["099720109477"] # Canonical
+}
+
+#--------------------------------------------------------------
+# Account ID
+#--------------------------------------------------------------
+
+# Get the AWS account ID so we can use it in IAM policies
+
+data "aws_caller_identity" "current" {}
+
+#--------------------------------------------------------------
+# Service Config
+#--------------------------------------------------------------
+
+variable "container_port" {
+  default = "80"
+}
+
+variable "service_name" {
+  default = "datacube"
+}
+
+variable "service_entrypoint" {
+  default = "web"
+}
+
+variable "max_percent" {
+  default     = "600"
+  description = "Max percentage of the desired count"
+}
+
+variable "timeout" {
+  default     = "3"
+  description = "time in minutes to wait for a service to become healthy"
 }

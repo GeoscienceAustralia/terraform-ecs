@@ -17,3 +17,7 @@ output "nat_complete" {
 output "ecs_lb_role" {
   value = "${aws_iam_role.ecs_lb_role.id}"
 }
+
+output "public_subnet_ids" {
+  value = "${module.public_subnet.ids}"
+}

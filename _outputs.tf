@@ -1,3 +1,3 @@
-output "ecs_lb_role" {
-  value = "${module.public.ecs_lb_role}"
+output "alb_dns_name" {
+  value = "${module.load_balancer.alb_dns_name}"
 }

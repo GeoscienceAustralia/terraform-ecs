@@ -21,6 +21,21 @@ resource "aws_security_group" "instance" {
     security_groups = ["${var.jump_ssh_sg_id}"]
   }
 
+  # Datacube
+  ingress {
+    from_port       = "${var.container_port}"
+    to_port         = "${var.container_port}"
+    protocol        = "TCP"
+    security_groups = ["${var.alb_security_group_id}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags {
     Name          = "ecs_instance_sg"
     Workspace     = "${var.workspace}"
@@ -29,17 +44,6 @@ resource "aws_security_group" "instance" {
     Owner         = "${var.owner}"
     Created_by    = "terraform"
   }
-}
-
-# We separate the rules from the aws_security_group because then we can manipulate the 
-# aws_security_group outside of this module
-resource "aws_security_group_rule" "outbound_internet_access" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.instance.id}"
 }
 
 # Default disk size for Docker is 22 gig, see http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html

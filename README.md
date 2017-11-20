@@ -220,6 +220,14 @@ Kubernetes and Mesos act like a big cluster where they encourage you to deploy a
 
 When deploying manually we can see if the new container has started or is stuck in a start/stop loop. But when deploying automatically this is not visible. To make sure we get alerted when containers start failing we need to watch for events from ECS who state that a container has STOPPED. This can be done by using the module [ecs_events](modules/ecs_events/main.tf). The only thing that is missing from the module is the actual alert. This is because terraform can't handle email and all other protocols for *aws_sns_topic_subscription* are specific per customer.
 
+## Troubleshooting issues
+```
+* aws_cloudwatch_log_group.docker: Creating CloudWatch Log Group failed: ResourceAlreadyExistsException: The specified log group already exists
+	status code: 400, request id: 8cc36c45-cd73-11e7-836f-9d4db602d5fa:  The CloudWatch Log Group '/var/log/docker' already exists.
+* module.ec2_instances.aws_cloudwatch_log_group.messages: 1 error(s) occurred:
+```
+Add cloudwatch_prefix = "test-ecs-dev"
+
 ## License
 This code is licensed under the MIT license. See the [license deed](LICENSE) for more details.
 

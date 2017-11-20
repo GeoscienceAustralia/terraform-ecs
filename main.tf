@@ -20,7 +20,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-southeast-2"
+  region = "${var.aws_region}"
 }
 
 resource "aws_ecs_cluster" "cluster" {
@@ -93,12 +93,14 @@ module "ec2_instances" {
   aws_ami           = "${var.ecs_aws_ami}"
 
   # Networking
-  vpc_id               = "${module.vpc.id}"
-  key_name             = "${var.key_name}"
-  jump_ssh_sg_id       = "${module.public.jump_ssh_sg_id}"
-  nat_ids              = "${module.public.nat_ids}"
-  availability_zones   = "${var.availability_zones}"
-  private_subnet_cidrs = "${var.private_subnet_cidrs}"
+  vpc_id                = "${module.vpc.id}"
+  key_name              = "${var.key_name}"
+  jump_ssh_sg_id        = "${module.public.jump_ssh_sg_id}"
+  nat_ids               = "${module.public.nat_ids}"
+  availability_zones    = "${var.availability_zones}"
+  private_subnet_cidrs  = "${var.private_subnet_cidrs}"
+  container_port        = "${var.container_port}"
+  alb_security_group_id = "${module.load_balancer.alb_security_group_id}"
 
   # Force dependency wait
   depends_id = "${module.public.nat_complete}"
@@ -107,4 +109,68 @@ module "ec2_instances" {
   owner     = "${var.owner}"
   cluster   = "${var.cluster}"
   workspace = "${var.workspace}"
+}
+
+module "ecs_policy" {
+  source = "modules/ecs_policy"
+
+  task_role_name = "${var.service_name}-role"
+
+  account_id         = "${data.aws_caller_identity.current.account_id}"
+  aws_region         = "${var.aws_region}"
+  ec2_security_group = "${module.ec2_instances.ecs_instance_security_group_id}"
+
+  # Tags
+  owner     = "${var.owner}"
+  cluster   = "${var.cluster}"
+  workspace = "${var.workspace}"
+}
+
+module "load_balancer" {
+  source = "modules/load_balancer"
+
+  container_port    = "${var.container_port}"
+  service_name      = "${var.service_name}"
+  alb_name          = "${var.cluster}-${var.workspace}"
+  vpc_id            = "${module.vpc.id}"
+  public_subnet_ids = "${module.public.public_subnet_ids}"
+
+  # Tags
+  owner     = "${var.owner}"
+  cluster   = "${var.cluster}"
+  workspace = "${var.workspace}"
+}
+
+resource "null_resource" "ecs_service" {
+  # automatically set off a deploy
+  # after this has run once, you can deploy manually by running
+  # ecs-cli compose --project-name datacube service up
+  triggers {
+    project-name           = "${var.service_name}"
+    task-role-arn          = "${module.ecs_policy.role_arn}"
+    cluster                = "${var.cluster}"
+    target-group-arn       = "${module.load_balancer.alb_target_group}"
+    role                   = "/ecs/${module.public.ecs_lb_role}"
+    container-name         = "${var.service_entrypoint}"
+    compose-file           = "${md5(file("docker-compose.yml"))}"
+    deployment-max-percent = "${var.max_percent}"
+    timeout                = "${var.timeout}"
+  }
+
+  provisioner "local-exec" {
+    # create and start our our ecs service
+    command = <<EOF
+ecs-cli compose \
+--project-name ${var.service_name} \
+--task-role-arn ${module.ecs_policy.role_arn} \
+--cluster ${var.cluster} \
+service up \
+--target-group-arn ${module.load_balancer.alb_target_group} \
+--role /ecs/${module.public.ecs_lb_role} \
+--container-name ${var.service_entrypoint} \
+--container-port ${var.container_port} \
+--deployment-max-percent ${var.max_percent} \
+--timeout ${var.timeout}
+EOF
+  }
 }

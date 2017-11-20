@@ -142,7 +142,8 @@ module "load_balancer" {
 }
 
 resource "null_resource" "ecs_service" {
-  # automatically set off a deploy, you can also deploy manually by running
+  # automatically set off a deploy
+  # after this has run once, you can deploy manually by running
   # ecs-cli compose --project-name datacube service up
   triggers {
     project-name           = "${var.service_name}"

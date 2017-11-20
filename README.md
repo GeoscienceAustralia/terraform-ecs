@@ -21,6 +21,10 @@ This repository contains the Terraform modules for creating a production ready E
   * [Service discovery](#service-discovery)
   * [ECS detect deployments failure](#ecs-detect-deployments-failure)
 
+## Local system Requirements
+* terraform > v0.10.0
+* ecs-cli > 1.0.0 (bda91d5)
+
 ## Running this template
 
 * In order to use the jumpbox in this repo you will require a Jumpbox AMI in your amazon region

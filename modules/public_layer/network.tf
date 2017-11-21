@@ -5,7 +5,7 @@
 # Creates network resources required by the public subnet
 
 module "public_subnet" {
-  source = "../components/subnet"
+  source = "../subnet"
 
   name               = "${var.cluster}-${var.workspace}_public_subnet"
   vpc_id             = "${var.vpc_id}"

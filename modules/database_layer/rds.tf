@@ -40,17 +40,3 @@ resource "aws_db_instance" "rds" {
     Created_by = "terraform"
   }
 }
-
-resource "aws_db_subnet_group" "rds-subnet" {
-  name        = "${var.cluster}_${var.workspace}_rds_subnet_group"
-  description = "${var.cluster} RDS Subnet Group"
-  subnet_ids  = ["${aws_subnet.database.*.id}"]
-
-  tags {
-    Name       = "${var.cluster}_${var.workspace}_ecs_rds_subnet_group"
-    Cluster    = "${var.cluster}"
-    Workspace  = "${var.workspace}"
-    Owner      = "${var.owner}"
-    Created_by = "terraform"
-  }
-}

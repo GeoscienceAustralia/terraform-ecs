@@ -5,7 +5,7 @@
 # Creates the instance subnet and route table
 
 module "private_subnet" {
-  source = "../components/subnet"
+  source = "../subnet"
 
   name               = "${var.cluster}-${var.workspace}_private_subnet"
   vpc_id             = "${var.vpc_id}"

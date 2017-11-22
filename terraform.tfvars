@@ -4,11 +4,13 @@ cluster_name = "test-ecs"
 
 workspace = "dev"
 
-public_subnet_cidrs = ["10.0.0.0/24", "10.0.1.0/24"]
+public_subnet_cidrs = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
 
-private_subnet_cidrs = ["10.0.50.0/24", "10.0.51.0/24"]
+private_subnet_cidrs = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
 
-availability_zones = ["ap-southeast-2a", "ap-southeast-2b"]
+database_subnet_cidrs = ["10.0.20.0/24", "10.0.21.0/24", "10.0.22.0/24"]
+
+availability_zones = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
 
 max_size = 3
 
@@ -25,4 +27,3 @@ owner = "YOUR EMAIL HERE"
 enable_jumpbox = false
 
 key_name = "AWS KEYNAME HERE"
-

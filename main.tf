@@ -28,7 +28,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 module "vpc" {
-  source = "modules/components/vpc"
+  source = "modules/vpc"
 
   cidr = "${var.vpc_cidr}"
 
@@ -64,10 +64,11 @@ module "database" {
   source = "modules/database_layer"
 
   # Networking
-  vpc_id             = "${module.vpc.id}"
-  availability_zones = "${var.availability_zones}"
-  ecs_instance_sg_id = "${module.ec2_instances.ecs_instance_security_group_id}"
-  jump_ssh_sg_id     = "${module.public.jump_ssh_sg_id}"
+  vpc_id                = "${module.vpc.id}"
+  availability_zones    = "${var.availability_zones}"
+  ecs_instance_sg_id    = "${module.ec2_instances.ecs_instance_security_group_id}"
+  jump_ssh_sg_id        = "${module.public.jump_ssh_sg_id}"
+  database_subnet_cidrs = "${var.database_subnet_cidrs}"
 
   # DB params
   db_admin_username = "${var.db_admin_username}"
@@ -155,6 +156,9 @@ resource "null_resource" "ecs_service" {
     compose-file           = "${md5(file("docker-compose.yml"))}"
     deployment-max-percent = "${var.max_percent}"
     timeout                = "${var.timeout}"
+
+    #enable for debugging
+    #timestamp = "${timestamp()}"
   }
 
   provisioner "local-exec" {

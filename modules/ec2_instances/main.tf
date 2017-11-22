@@ -21,10 +21,10 @@ resource "aws_security_group" "instance" {
     security_groups = ["${var.jump_ssh_sg_id}"]
   }
 
-  # Datacube
+  # ECS dynamically assigns ports in the ephemeral range
   ingress {
-    from_port       = "${var.container_port}"
-    to_port         = "${var.container_port}"
+    from_port       = 32768
+    to_port         = 65535
     protocol        = "TCP"
     security_groups = ["${var.alb_security_group_id}"]
   }

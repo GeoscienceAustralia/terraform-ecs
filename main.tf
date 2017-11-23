@@ -73,6 +73,8 @@ module "database" {
   # DB params
   db_admin_username = "${var.db_admin_username}"
   db_admin_password = "${var.db_admin_password}"
+  dns_name = "${var.db_dns_name}"
+  zone = "${var.db_zone}"
 
   # Tags
   owner     = "${var.owner}"
@@ -135,6 +137,7 @@ module "load_balancer" {
   alb_name          = "${var.cluster}-${var.workspace}"
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.public.public_subnet_ids}"
+  health_check_path = "${var.health_check_path}"
 
   # Tags
   owner     = "${var.owner}"
@@ -153,7 +156,7 @@ resource "null_resource" "ecs_service" {
     target-group-arn       = "${module.load_balancer.alb_target_group}"
     role                   = "/ecs/${module.public.ecs_lb_role}"
     container-name         = "${var.service_entrypoint}"
-    compose-file           = "${md5(file("docker-compose.yml"))}"
+    compose-file           = "${md5(file(var.service_compose))}"
     deployment-max-percent = "${var.max_percent}"
     timeout                = "${var.timeout}"
 
@@ -169,6 +172,7 @@ ecs-cli compose \
 --project-name ${var.service_name} \
 --task-role-arn ${module.ecs_policy.role_arn} \
 --cluster ${var.cluster} \
+--file ${var.service_compose} \
 service up \
 --target-group-arn ${module.load_balancer.alb_target_group} \
 --role /ecs/${module.public.ecs_lb_role} \

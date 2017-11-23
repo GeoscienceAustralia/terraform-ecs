@@ -128,6 +128,16 @@ variable db_admin_password {
   description = "the admin password for the rds instance"
 }
 
+variable "db_dns_name" {
+  default = "database"
+  description = "Database url prefix"
+}
+
+variable "db_zone" {
+  default = "local"
+  description = "Route53 Zone suffix"
+}
+
 #--------------------------------------------------------------
 # Server Images
 #--------------------------------------------------------------
@@ -189,6 +199,10 @@ variable "service_entrypoint" {
   default = "web"
 }
 
+variable "service_compose" {
+  default = "docker-compose.yml"
+}
+
 variable "max_percent" {
   default     = "600"
   description = "Max percentage of the desired count"
@@ -198,3 +212,10 @@ variable "timeout" {
   default     = "3"
   description = "time in minutes to wait for a service to become healthy"
 }
+
+variable "health_check_path" {
+  default = "/"
+  description = "path for load balancer health check"
+}
+
+

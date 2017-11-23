@@ -132,6 +132,20 @@ variable "jump_ssh_sg_id" {
 }
 
 #--------------------------------------------------------------
+# Route53 DNS
+#--------------------------------------------------------------
+
+variable "dns_name" {
+  default = "database"
+  description = "Database url prefix"
+}
+
+variable "zone" {
+  default = "local"
+  description = "Route53 Zone suffix"
+}
+
+#--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
 

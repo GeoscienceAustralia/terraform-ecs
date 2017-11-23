@@ -73,6 +73,8 @@ module "database" {
   # DB params
   db_admin_username = "${var.db_admin_username}"
   db_admin_password = "${var.db_admin_password}"
+  dns_name = "${var.db_dns_name}"
+  zone = "${var.db_zone}"
 
   # Tags
   owner     = "${var.owner}"

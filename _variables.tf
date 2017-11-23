@@ -128,6 +128,16 @@ variable db_admin_password {
   description = "the admin password for the rds instance"
 }
 
+variable "db_dns_name" {
+  default = "database"
+  description = "Database url prefix"
+}
+
+variable "db_zone" {
+  default = "local"
+  description = "Route53 Zone suffix"
+}
+
 #--------------------------------------------------------------
 # Server Images
 #--------------------------------------------------------------
@@ -207,3 +217,5 @@ variable "health_check_path" {
   default = "/"
   description = "path for load balancer health check"
 }
+
+

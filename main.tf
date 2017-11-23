@@ -164,6 +164,7 @@ resource "null_resource" "ecs_service" {
   provisioner "local-exec" {
     # create and start our our ecs service
     command = <<EOF
+export PUBLIC_URL=${module.load_balancer.alb_dns_name} && \
 ecs-cli compose \
 --project-name ${var.service_name} \
 --task-role-arn ${module.ecs_policy.role_arn} \

@@ -189,6 +189,10 @@ variable "service_entrypoint" {
   default = "web"
 }
 
+variable "service_compose" {
+  default = "docker-compose.yml"
+}
+
 variable "max_percent" {
   default     = "600"
   description = "Max percentage of the desired count"

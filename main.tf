@@ -135,6 +135,7 @@ module "load_balancer" {
   alb_name          = "${var.cluster}-${var.workspace}"
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.public.public_subnet_ids}"
+  health_check_path = "${var.health_check_path}"
 
   # Tags
   owner     = "${var.owner}"

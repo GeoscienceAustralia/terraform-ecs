@@ -202,3 +202,8 @@ variable "timeout" {
   default     = "3"
   description = "time in minutes to wait for a service to become healthy"
 }
+
+variable "health_check_path" {
+  default = "/"
+  description = "path for load balancer health check"
+}

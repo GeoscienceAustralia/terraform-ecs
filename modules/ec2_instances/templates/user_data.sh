@@ -85,6 +85,9 @@ end script
 
 EOF
 
+# Mount the EFS
+sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ${efs_id}.efs.ap-southeast-2.amazonaws.com:/ /opt/data/
+
 start ecs
 
 #Get ECS instance info, although not used in this user_data itself this allows you to use

@@ -30,7 +30,7 @@ resource "aws_security_group" "mount_target_sg" {
     to_port   = 2049
     protocol  = "tcp"
 
-    security_groups = "${aws_security_group.instance.id}"
+    security_groups = ["${aws_security_group.instance.id}"]
   }
 
   tags {

@@ -5,7 +5,7 @@ ln -fs usr/share/zoneinfo/Australia/ACT /etc/localtime
 
 #Using script from http://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_cloudwatch_logs.html
 # Install awslogs and the jq JSON parser
-yum install -y awslogs jq aws-cli
+yum install -y awslogs jq aws-cli nfs-utils
 
 # ECS config
 ${ecs_config}

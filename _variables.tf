@@ -138,6 +138,11 @@ variable "db_zone" {
   description = "Route53 Zone suffix"
 }
 
+variable "db_name" {
+  default = "postgres"
+  description = "Name of the first database"
+}
+
 #--------------------------------------------------------------
 # Server Images
 #--------------------------------------------------------------

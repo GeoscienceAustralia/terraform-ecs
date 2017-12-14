@@ -192,6 +192,10 @@ data "aws_caller_identity" "current" {}
 # Service Config
 #--------------------------------------------------------------
 
+variable "use_ecs_cli_compose" {
+  default = true
+}
+
 variable "container_port" {
   default = "80"
 }

@@ -145,11 +145,3 @@ module "load_balancer" {
   cluster   = "${var.cluster}"
   workspace = "${var.workspace}"
 }
-
-output "alb_load_balancer_dns" {
-  value = "${module.load_balancer.alb_dns_name}"
-}
-
-output "alb_target_group_arn" {
-  value = "${module.load_balancer.alb_target_group}"
-}

@@ -138,6 +138,11 @@ variable "db_zone" {
   description = "Route53 Zone suffix"
 }
 
+variable "db_name" {
+  default = "postgres"
+  description = "Name of the first database"
+}
+
 #--------------------------------------------------------------
 # Server Images
 #--------------------------------------------------------------
@@ -186,6 +191,10 @@ data "aws_caller_identity" "current" {}
 #--------------------------------------------------------------
 # Service Config
 #--------------------------------------------------------------
+
+variable "use_ecs_cli_compose" {
+  default = true
+}
 
 variable "container_port" {
   default = "80"

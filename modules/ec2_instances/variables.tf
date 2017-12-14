@@ -6,6 +6,11 @@ variable "vpc_id" {
   description = "The VPC id"
 }
 
+variable "aws_region" {
+  description = "AWS Region we are running in"
+  default = "ap-southeast-2"
+}
+
 #--------------------------------------------------------------
 # Network Settings
 #--------------------------------------------------------------

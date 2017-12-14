@@ -113,6 +113,8 @@ module "ec2_instances" {
   owner     = "${var.owner}"
   cluster   = "${var.cluster}"
   workspace = "${var.workspace}"
+
+  aws_region = "${var.aws_region}"
 }
 
 module "ecs_policy" {

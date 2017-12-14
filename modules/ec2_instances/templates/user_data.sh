@@ -58,7 +58,7 @@ EOF
 
 # Set the region to send CloudWatch Logs data to (the region where the container instance is located)
 region=$(curl 169.254.169.254/latest/meta-data/placement/availability-zone | sed s'/.$//')
-sed -i -e "s/region = us-east-1/region = $region/g" /etc/awslogs/awscli.conf
+sed -i -e "s/region = us-east-1/region = ${aws_region}/g" /etc/awslogs/awscli.conf
 
 # Set the ip address of the node 
 container_instance_id=$(curl 169.254.169.254/latest/meta-data/local-ipv4)

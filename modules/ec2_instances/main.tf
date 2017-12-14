@@ -130,6 +130,7 @@ data "template_file" "user_data" {
     env_name          = "${var.workspace}"
     custom_userdata   = "${var.custom_userdata}"
     cloudwatch_prefix = "${var.cloudwatch_prefix}"
-    efs_id = "${aws_efs_file_system.efs.id}"
+    aws_region        = "${var.aws_region}"
+    efs_id            = "${aws_efs_file_system.efs.id}"
   }
 }

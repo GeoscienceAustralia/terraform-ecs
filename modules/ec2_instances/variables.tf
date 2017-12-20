@@ -115,6 +115,7 @@ variable "container_port" {
 }
 
 variable "alb_security_group_id" {
+  type = "list"
   description = "The security group of the alb"
 }
 

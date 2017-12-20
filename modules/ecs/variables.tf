@@ -37,17 +37,6 @@ variable "family" {
   description = "The family of the task"
 }
 
-variable "container" {
-  type = "string"
-  default = "geoscienceaustralia/datacube-wms:latest"
-  description = "Docker container address. e.g. geoscienceaustralia/datacube:latest"
-}
-
-variable "memory" {
-  default = 1024
-  description = "Memory available to container in MiB"
-}
-
 variable "container_path" {
   type = "string"
   default = "/opt/data"
@@ -60,16 +49,42 @@ variable "volume_name" {
   description = "name of the volume to be mounted"
 }
 
-variable "public_url" {
-  type = "string"
-  description = "DNS name of the ELB"
-}
-
 variable "task_role_arn" {
   type = "string"
   description = "ARN for the role the task will run as"
 }
 
-variable "db_admin_password" {
+variable "container_definitions" {
   type = "string"
+  description = "JSON container definition"
+  # example JSON string
+  #   <<EOF
+  #   [
+  #     {
+  #     "name": "${var.container_name}",
+  #     "image": "${var.container}",
+  #     "memory": ${var.memory},
+  #     "essential": true,
+  #     "portMappings": [
+  #       {
+  #         "containerPort": ${var.container_port}
+  #       }
+  #     ],
+  #     "mountPoints": [
+  #       {
+  #         "containerPath": "${var.container_path}",
+  #         "sourceVolume": "${var.volume_name}"
+  #       }
+  #     ],
+  #     "environment": [
+  #       { "name": "DB_USERNAME", "value": "master" },
+  #       { "name": "DB_PASSWORD", "value": "${var.db_admin_password}" },
+  #       { "name": "DB_DATABASE", "value": "datacube" },
+  #       { "name": "DB_HOSTNAME", "value": "database.local" },
+  #       { "name": "DB_PORT", "value": "5432" },
+  #       { "name": "PUBLIC_URL", "value": "${var.public_url}"}
+  #     ]
+  #   }
+  # ]
+  # EOF
 }

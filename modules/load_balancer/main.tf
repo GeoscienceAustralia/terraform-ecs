@@ -69,7 +69,7 @@ resource "aws_security_group_rule" "http_from_anywhere" {
   security_group_id = "${aws_security_group.alb.id}"
 }
 
-resource "aws_security_group_rule" "outbound_internet_access" { 
+resource "aws_security_group_rule" "outbound_internet_access" {
   type              = "egress"
   from_port         = 0
   to_port           = 0

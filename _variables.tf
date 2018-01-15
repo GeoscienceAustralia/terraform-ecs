@@ -196,10 +196,6 @@ variable "use_ecs_cli_compose" {
   default = true
 }
 
-variable "use_alb_module" {
-  default = true
-}
-
 variable "container_port" {
   default = "80"
 }

@@ -30,3 +30,9 @@ variable "ec2_security_group" {
 variable "task_role_name" {
   description = "The name of the role"
 }
+
+variable "parameter_store_resource" {
+  type = "string"
+  default = "*"
+  description = "The parameter store services that can be acccessed. E.g. * for all or /datacube/* for all datacube"
+}

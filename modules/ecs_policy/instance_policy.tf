@@ -1,21 +1,40 @@
+resource "aws_kms_key" "parameter_store_key" {
+  # For operation with chamber, the parameter_store_key
+  # should be imported to use here. Alternatively the exported
+  # key_id could be used as an environment variable argument
+  # to chamber on the ECS instances 
+}
+
 data "aws_iam_policy_document" "container_perms" {
   statement {
     actions = [
-      "ssm:GetParameters",
+      "ssm:GetParameters"
     ]
 
     resources = [
-      "arn:aws:ssm:${var.aws_region}:${var.account_id}:parameter*",
+      "arn:aws:ssm:${var.aws_region}:${var.account_id}:parameter/${var.parameter_store_resource}",
     ]
   }
 
   statement {
     actions = [
-      "kms:*",
+      "ssm:DescribeParameters"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.aws_region}:${var.account_id}:*",
+    ]
+  }
+
+  statement {
+    actions = [
+      "kms:ListKeys",
+      "kms:ListAliases",
+      "kms:Describe*",
+      "kms:Decrypt",
     ]
 
     resources = [
-      "arn:aws:kms:${var.aws_region}:${var.account_id}:key/${var.ssm_decrypt_key}",
+      "${aws_kms_key.parameter_store_key.arn}",
     ]
   }
 }

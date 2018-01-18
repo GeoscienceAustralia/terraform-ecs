@@ -2,21 +2,23 @@
 # App / efs.tf
 #==============================================================
 
-# Elastic File System to host the app files
+# Elastic File System to host application files
 
 resource "aws_efs_file_system" "efs" {
   tags {
-    Name        = "${var.cluster}_${var.workspace}_efs"
-    owner       = "${var.owner}"
+    Name      = "${var.cluster}_${var.workspace}_efs"
+    owner     = "${var.owner}"
     workspace = "${var.workspace}"
-    cluster  = "${var.cluster}"
+    cluster   = "${var.cluster}"
   }
 }
 
+# Mount targets will require the private subnet info
+# from the ec2 module in order to connect to them
 resource "aws_efs_mount_target" "efs_mount_target" {
   count           = "${length(var.availability_zones)}"
   file_system_id  = "${aws_efs_file_system.efs.id}"
-  subnet_id       = "${element(module.private_subnet.ids, count.index)}"
+  subnet_id       = "${element(var.private_subnet_ids, count.index)}"
   security_groups = ["${aws_security_group.mount_target_sg.id}"]
 }
 
@@ -30,7 +32,7 @@ resource "aws_security_group" "mount_target_sg" {
     to_port   = 2049
     protocol  = "tcp"
 
-    security_groups = ["${aws_security_group.instance.id}"]
+    security_groups = ["${var.ecs_instance_security_group_id}"]
   }
 
   tags {

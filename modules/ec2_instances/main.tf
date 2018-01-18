@@ -52,7 +52,7 @@ resource "aws_launch_configuration" "launch" {
   image_id             = "${var.aws_ami}"
   instance_type        = "${var.instance_type}"
   security_groups      = ["${aws_security_group.instance.id}"]
-  user_data            = "${data.template_file.user_data.rendered}"
+  user_data            = "${local.final_user_data}"
   iam_instance_profile = "${aws_iam_instance_profile.ecs.id}"
   key_name             = "${var.key_name}"
 
@@ -120,6 +120,13 @@ resource "aws_autoscaling_group" "asg" {
   }
 }
 
+locals {
+  final_user_data =  <<EOF
+  ${data.template_file.user_data.rendered}
+  ${var.use_efs} ? ${data.template_file.efs_user_data.rendered} : ""
+  EOF
+}
+
 data "template_file" "user_data" {
   template = "${file("${path.module}/templates/user_data.sh")}"
 
@@ -131,6 +138,16 @@ data "template_file" "user_data" {
     custom_userdata   = "${var.custom_userdata}"
     cloudwatch_prefix = "${var.cloudwatch_prefix}"
     aws_region        = "${var.aws_region}"
-    efs_id            = "${aws_efs_file_system.efs.id}"
+  }
+}
+
+data "template_file" "efs_user_data" {
+  template = "sudo mkdir -p /opt/data && sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 $${efs_id}.efs.$${aws_region}.amazonaws.com:/ /opt/data/"
+
+  count = "${var.use_efs}"
+
+  vars {
+    efs_id     = "${var.efs_id}"
+    aws_region = "${var.aws_region}"
   }
 }

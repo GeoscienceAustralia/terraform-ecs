@@ -120,6 +120,24 @@ variable "alb_security_group_id" {
 }
 
 #--------------------------------------------------------------
+# EFS
+#--------------------------------------------------------------
+
+variable "efs_id" {
+  type    = "string"
+  default = "" 
+}
+
+variable "use_efs" {
+  default = true
+}
+
+variable "mount_dir" {
+  default     = "/opt/data"
+  description = "Directory on EC2 where EFS will be mounted."
+}
+
+#--------------------------------------------------------------
 # Tags
 #--------------------------------------------------------------
 

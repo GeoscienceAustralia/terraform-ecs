@@ -9,3 +9,7 @@ output "ecs_instance_security_group_id" {
 output "private_subnet_ids" {
   value = "${module.private_subnet.ids}"
 }
+
+output "private_subnet_route_table_ids" {
+  value = "${module.private_subnet.route_table_ids}"
+}

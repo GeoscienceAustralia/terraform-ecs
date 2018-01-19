@@ -122,8 +122,8 @@ resource "aws_autoscaling_group" "asg" {
 
 locals {
   final_user_data =  <<EOF
-  ${data.template_file.user_data.rendered}
-  ${var.use_efs} ? ${data.template_file.efs_user_data.rendered} : ""
+${data.template_file.user_data.rendered}
+${var.use_efs == 1 ? data.template_file.efs_user_data.rendered : ""}
   EOF
 }
 

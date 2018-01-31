@@ -7,14 +7,14 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   }
 
   enabled = "${var.enable}"
-  is_ipv6_enabled = true
+  is_ipv6_enabled = "${var.enable_ipv6}"
   default_root_object = ""
 
   aliases = "${var.aliases}"
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
+    allowed_methods  = "${var.default_allowed_methods}"
+    cached_methods   = "${var.default_cached_methods}"
     target_origin_id = "${var.origin_id}"
 
     forwarded_values {
@@ -26,9 +26,9 @@ resource "aws_cloudfront_distribution" "cloudfront" {
     }
 
     viewer_protocol_policy = "allow-all"
-    min_ttl                = 0
-    max_ttl                = 31536000
-    default_ttl            = 86400
+    min_ttl                = "${var.min_ttl}"
+    max_ttl                = "${var.max_ttl}"
+    default_ttl            = "${var.default_ttl}"
 
   }
 
@@ -42,5 +42,5 @@ resource "aws_cloudfront_distribution" "cloudfront" {
     cloudfront_default_certificate = true
   }
 
-  price_class = "PriceClass_All"
+  price_class = "${var.price_class}"
 }

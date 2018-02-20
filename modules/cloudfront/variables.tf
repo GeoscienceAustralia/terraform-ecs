@@ -8,6 +8,22 @@ variable "origin_id" {
   description = "User defined unique ID for the the origin"
 }
 
+variable "origin_http_port" {
+  default = 80
+  description = "HTTP port the origin listens on"
+}
+
+variable "origin_https_port" {
+  default = 443
+  description = "HTTPS port the origin listens on"
+}
+
+variable "origin_protocol_policy" {
+  type = "string"
+  default = "match-viewer"
+  description = "Which protocol is used to connect to origin, http-only, https-only, match-viewer"
+}
+
 variable "enable" {
   default = false
 }

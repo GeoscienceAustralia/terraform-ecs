@@ -26,6 +26,7 @@ variable "origin_protocol_policy" {
 
 variable "enable" {
   default = false
+  description = "Enables the cloudfront distribution"
 }
 
 variable "aliases" {

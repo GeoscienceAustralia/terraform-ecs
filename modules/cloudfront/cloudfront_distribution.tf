@@ -1,4 +1,4 @@
-
+# Creates a basic cloudfront disribution with a custom (i.e. not S3) origin
 
 resource "aws_cloudfront_distribution" "cloudfront" {
   origin {

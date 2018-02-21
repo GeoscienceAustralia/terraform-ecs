@@ -1,3 +1,5 @@
+# Simple route53 zone and record for single domain access to the ECS service
+
 data "aws_route53_zone" "selected" {
   name         = "${var.zone_domain_name}"
   private_zone = "${var.private_zone}"

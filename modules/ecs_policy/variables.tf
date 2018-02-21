@@ -36,3 +36,9 @@ variable "parameter_store_resource" {
   default = "*"
   description = "The parameter store services that can be acccessed. E.g. * for all or /datacube/* for all datacube"
 }
+
+# Dummy variable to emulate a depends_on
+variable depends_on {
+  default = [],
+  type = "list"
+}

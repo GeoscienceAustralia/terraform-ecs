@@ -88,3 +88,18 @@ variable "container_definitions" {
   # ]
   # EOF
 }
+
+# variable "cpu" {
+#   type = "string"
+#   default = 1024
+# }
+
+# variable "cpu" {
+#   type = "string"
+#   default = 1024
+# }
+
+# variable "launch_type" {
+#   type = "string"
+#   default = "FARGATE"
+# }

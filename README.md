@@ -101,7 +101,7 @@ These are the conventions we have in every module
 
 ## Create it
 
-To create a working ECS cluster from this repository see **ecs.tf** and **terraform.tfvars**.
+To create a working ECS cluster from this repository see **main.tf** and **terraform.tfvars**.
 
 Quick way to create this from the repository as is:
 

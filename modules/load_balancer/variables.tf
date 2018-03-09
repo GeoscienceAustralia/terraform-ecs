@@ -58,6 +58,6 @@ variable "ssl_cert_arn" {
 }
 
 variable "ssl_policy_name" {
-  default     = ""
-  description = "The name of the SSL policy for an ALB listener. If enable_https is true this must be specified."
+  default     = "ELBSecurityPolicy-2016-08"
+  description = "The name of the SSL policy for an ALB listener. See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies"
 }

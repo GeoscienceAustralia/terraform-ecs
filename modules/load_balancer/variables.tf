@@ -46,3 +46,18 @@ variable "allow_cidr_block" {
   default     = "0.0.0.0/0"
   description = "Specify cidr block that is allowed to access the LoadBalancer"
 }
+
+variable "enable_https" {
+  default     = false
+  description = "Specify if this ALB will allow HTTPS"
+}
+
+variable "ssl_cert_arn" {
+  default     = ""
+  description = "If enable_https is true this must be specified"
+}
+
+variable "ssl_policy_name" {
+  default     = ""
+  description = "The name of the SSL policy for an ALB listener. If enable_https is true this must be specified."
+}

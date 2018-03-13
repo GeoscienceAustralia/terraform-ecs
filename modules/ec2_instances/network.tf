@@ -24,3 +24,9 @@ resource "aws_route" "private_nat_route" {
   nat_gateway_id         = "${element(var.nat_ids, count.index)}"
   destination_cidr_block = "${var.destination_cidr_block}"
 }
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id          = "${var.vpc_id}"
+  service_name    = "com.amazonaws.ap-southeast-2.s3"
+  route_table_ids = [ "${module.private_subnet.route_table_ids}" ]
+}

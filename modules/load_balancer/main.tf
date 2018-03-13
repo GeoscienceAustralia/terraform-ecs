@@ -45,6 +45,8 @@ resource "aws_alb_listener" "http" {
     target_group_arn = "${aws_alb_target_group.default.id}"
     type             = "forward"
   }
+
+  depends_on = [ "aws_alb_target_group.default" ]
 }
 
 resource "aws_security_group" "alb" {
@@ -92,6 +94,8 @@ resource "aws_alb_listener" "https" {
     target_group_arn = "${aws_alb_target_group.default.id}"
     type             = "forward"
   }
+
+  depends_on = [ "aws_alb_target_group.default" ]
 }
 
 resource "aws_security_group_rule" "https_from_anywhere" {

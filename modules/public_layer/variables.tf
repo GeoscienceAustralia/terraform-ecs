@@ -26,10 +26,6 @@ variable "ssh_ip_address" {}
 # Network config
 #--------------------------------------------------------------
 
-variable "public_subnet_count" {
-  description = "Size of the subnet_ids. This needs to be provided because: value of 'count' cannot be computed"
-}
-
 variable "public_subnet_cidrs" {
   description = "List of public cidrs, for every availability zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = "list"

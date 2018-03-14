@@ -27,7 +27,7 @@ resource "aws_route" "public_igw_route" {
 
 resource "aws_eip" "nat" {
   vpc   = true
-  count = "${var.public_subnet_count}"
+  count = "${length(var.public_subnet_cidrs)}"
 }
 
 # Using the AWS NAT Gateway service instead of a nat instance, it's more expensive but easier
@@ -36,7 +36,7 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id     = "${element(module.public_subnet.ids, count.index)}"
-  count         = "${var.public_subnet_count}"
+  count         = "${length(module.public_subnet.ids)}"
 }
 
 # Creating a NAT Gateway takes some time. Some services need the internet (NAT Gateway) before proceeding. 

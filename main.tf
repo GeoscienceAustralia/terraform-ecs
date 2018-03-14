@@ -46,7 +46,6 @@ module "public" {
   vpc_igw_id          = "${module.vpc.igw_id}"
   availability_zones  = "${var.availability_zones}"
   public_subnet_cidrs = "${var.public_subnet_cidrs}"
-  public_subnet_count = "${length(var.public_subnet_cidrs)}"
 
   # Jumpbox
   ssh_ip_address = "${var.ssh_ip_address}"

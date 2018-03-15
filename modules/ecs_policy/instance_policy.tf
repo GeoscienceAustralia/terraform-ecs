@@ -37,6 +37,18 @@ data "aws_iam_policy_document" "container_perms" {
       "${aws_kms_key.parameter_store_key.arn}",
     ]
   }
+
+  statement {
+    actions = [
+      "s3:*"
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    effect = "Allow"
+  }
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {

@@ -36,7 +36,7 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id     = "${element(module.public_subnet.ids, count.index)}"
-  count         = "${length(module.public_subnet.ids)}"
+  count         = "${length(var.public_subnet_cidrs)}"
 }
 
 # Creating a NAT Gateway takes some time. Some services need the internet (NAT Gateway) before proceeding. 

@@ -20,6 +20,8 @@ resource "aws_alb_target_group" "default" {
     Created_by = "terraform"
     Owner      = "${var.owner}"
   }
+
+  depends_on = [ "aws_alb.alb" ]
 }
 
 resource "aws_alb" "alb" {

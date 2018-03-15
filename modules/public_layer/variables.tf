@@ -45,6 +45,10 @@ variable "availability_zones" {
   type        = "list"
 }
 
+variable "enable_nat" {
+  default = false
+}
+
 #--------------------------------------------------------------
 # Common Settings
 #--------------------------------------------------------------

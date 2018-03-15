@@ -19,7 +19,7 @@ module "private_subnet" {
 }
 
 resource "aws_route" "private_nat_route" {
-  count                  = "${length(var.nat_ids)}"
+  count                  = "${var.enable_nat ? length(var.private_subnet_cidrs) : 0}"
   route_table_id         = "${element(module.private_subnet.route_table_ids, count.index)}"
   nat_gateway_id         = "${element(var.nat_ids, count.index)}"
   destination_cidr_block = "${var.destination_cidr_block}"

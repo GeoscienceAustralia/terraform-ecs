@@ -31,6 +31,11 @@ variable "public_subnet_cidrs" {
   type        = "list"
 }
 
+variable "private_subnet_cidrs" {
+  type = "list"
+  description = "List of private cidrs"
+}
+
 variable "destination_cidr_block" {
   description = "Specify all traffic to be routed either through Internet Gateway or NAT to access the internet"
   default     = "0.0.0.0/0"
@@ -46,6 +51,10 @@ variable "availability_zones" {
 }
 
 variable "enable_nat" {
+  default = false
+}
+
+variable "enable_gateways" {
   default = false
 }
 

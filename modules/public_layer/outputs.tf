@@ -7,11 +7,11 @@ output "jump_ssh_sg_id" {
 }
 
 output "nat_ids" {
-  value = ["${aws_nat_gateway.nat.*.id}"]
+  value = "${split(",", (var.enable_nat && var.enable_gateways) ? join(",", aws_nat_gateway.nat.*.id) : join(",", list()))}"
 }
 
 output "nat_complete" {
-  value = "${null_resource.nat_complete.id}"
+  value = "${!var.enable_nat ? "" : var.enable_gateways ? null_resource.gateway_nat_complete.id : null_resource.ec2_nat_complete.id}"
 }
 
 output "ecs_lb_role" {

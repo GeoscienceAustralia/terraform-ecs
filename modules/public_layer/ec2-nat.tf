@@ -1,13 +1,19 @@
 resource "aws_instance" "ec2_nat" {
   ami = "${data.aws_ami.nat.id}"
   instance_type = "t2.micro"
-
+  source_dest_check = false
   vpc_security_group_ids = [ "${aws_security_group.nat_sg.id}", "${aws_security_group.jump_ssh_sg.id}" ]
+  subnet_id              = "${element(module.public_subnet.ids, count.index)}"
 
   availability_zone = "${element(var.availability_zones, count.index)}"
 
   count = "${(var.enable_nat && !var.enable_gateways) ? length(var.public_subnet_cidrs) : 0}"
+
+  tags {
+    Name = "${var.cluster}-${var.workspace}-NAT-${count.index}"
+  }
 }
+
 
 resource "aws_eip_association" "eip_ec2" {
   instance_id   = "${element(aws_instance.ec2_nat.*.id, count.index)}"
@@ -34,28 +40,28 @@ resource "aws_security_group" "nat_sg" {
   ingress {
     from_port   = 80
     to_port     = 80
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = "${var.private_subnet_cidrs}"
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = "${var.private_subnet_cidrs}"
   }
 
   egress {
     from_port       = 80
     to_port         = 80
-    protocol        = "-1"
+    protocol        = "tcp"
     cidr_blocks     = ["${var.destination_cidr_block}"]
   }
 
   egress {
     from_port       = 443
     to_port         = 443
-    protocol        = "-1"
+    protocol        = "tcp"
     cidr_blocks     = ["${var.destination_cidr_block}"]
   }
 

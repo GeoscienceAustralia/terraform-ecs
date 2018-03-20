@@ -35,7 +35,16 @@ variable "nat_ids" {
   type        = "list"
 }
 
+variable "nat_instance_ids" {
+  type = "list"
+  description = "List of EC2 NAT instance IDs"
+}
+
 variable "enable_nat" {
+  default = false
+}
+
+variable "enable_gateways" {
   default = false
 }
 

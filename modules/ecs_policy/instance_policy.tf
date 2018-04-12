@@ -65,18 +65,18 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 resource "aws_iam_policy" "access_to_ssm" {
-  name   = "${var.workspace}_tf_access_to_ssm_exc"
+  name   = "${var.workspace}_${var.name}_tf_access_to_ssm_exc"
   path   = "/"
   policy = "${data.aws_iam_policy_document.container_perms.json}"
 }
 
 resource "aws_iam_role" "instance_role" {
-  name               = "${var.workspace}_tf_odc_ecs_role"
+  name               = "${var.workspace}_${var.name}_tf_odc_ecs_role"
   assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
 }
 
 resource "aws_iam_policy_attachment" "ssm_perms_to_odc_role" {
-  name       = "${var.workspace}_attach_ssm_policy_to_odc_ecs"
+  name       = "${var.workspace}_${var.name}_attach_ssm_policy_to_odc_ecs"
   roles      = ["${aws_iam_role.instance_role.name}"]
   policy_arn = "${aws_iam_policy.access_to_ssm.id}"
 }

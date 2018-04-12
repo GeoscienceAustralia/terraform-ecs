@@ -6,6 +6,10 @@ variable "cluster" {
   description = "The name of the cluster"
 }
 
+variable "name" {
+  description = "The name of the ECS cluster"
+}
+
 variable "owner" {
   description = "mailing list that represents the owner of the service"
 }

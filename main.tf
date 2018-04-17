@@ -93,7 +93,7 @@ module "ec2_instances" {
   min_size          = "${var.min_size}"
   desired_capacity  = "${var.desired_capacity}"
   custom_userdata   = "${var.custom_userdata}"
-  cloudwatch_prefix = "${var.cloudwatch_prefix}"
+  cloudwatch_prefix = "${var.cluster}"
   aws_ami           = "${var.ecs_aws_ami}"
 
   # Networking
@@ -105,7 +105,7 @@ module "ec2_instances" {
   availability_zones    = "${var.availability_zones}"
   private_subnet_cidrs  = "${var.private_subnet_cidrs}"
   container_port        = "${var.container_port}"
-  alb_security_group_id = "${module.load_balancer.alb_security_group_id}"
+  alb_security_group_id = ["${module.load_balancer.alb_security_group_id}"]
 
   # Force dependency wait
   depends_id = "${module.public.nat_complete}"

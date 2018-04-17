@@ -105,7 +105,7 @@ module "ec2_instances" {
   availability_zones    = "${var.availability_zones}"
   private_subnet_cidrs  = "${var.private_subnet_cidrs}"
   container_port        = "${var.container_port}"
-  alb_security_group_id = "${module.load_balancer.alb_security_group_id}"
+  alb_security_group_id = ["${module.load_balancer.alb_security_group_id}"]
 
   # Force dependency wait
   depends_id = "${module.public.nat_complete}"

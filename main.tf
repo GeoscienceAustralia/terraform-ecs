@@ -10,7 +10,7 @@ terraform {
     # have multiple enviornments alongside each other we set
     # this dynamically in the bitbucket-pipelines.yml with the
     # --backend
-    key = "ecs-test/"
+    key = "datacube-ecs-test/"
 
     region = "ap-southeast-2"
 
@@ -46,6 +46,7 @@ module "public" {
   vpc_igw_id          = "${module.vpc.igw_id}"
   availability_zones  = "${var.availability_zones}"
   public_subnet_cidrs = "${var.public_subnet_cidrs}"
+  private_subnet_cidrs = "${var.private_subnet_cidrs}"
 
   # Jumpbox
   ssh_ip_address = "${var.ssh_ip_address}"
@@ -100,6 +101,7 @@ module "ec2_instances" {
   key_name              = "${var.key_name}"
   jump_ssh_sg_id        = "${module.public.jump_ssh_sg_id}"
   nat_ids               = "${module.public.nat_ids}"
+  nat_instance_ids      = "${module.public.nat_instance_ids}"
   availability_zones    = "${var.availability_zones}"
   private_subnet_cidrs  = "${var.private_subnet_cidrs}"
   container_port        = "${var.container_port}"
@@ -124,7 +126,8 @@ module "ecs_policy" {
   account_id         = "${data.aws_caller_identity.current.account_id}"
   aws_region         = "${var.aws_region}"
   ec2_security_group = "${module.ec2_instances.ecs_instance_security_group_id}"
-
+  name               = "${var.cluster}"
+  
   # Tags
   owner     = "${var.owner}"
   cluster   = "${var.cluster}"
@@ -147,45 +150,3 @@ module "load_balancer" {
   workspace = "${var.workspace}"
 }
 
-resource "null_resource" "ecs_service" {
-
-  count = "${var.use_ecs_cli_compose}"
-
-  # automatically set off a deploy
-  # after this has run once, you can deploy manually by running
-  # ecs-cli compose --project-name datacube service up
-  triggers {
-    project-name           = "${var.service_name}"
-    task-role-arn          = "${module.ecs_policy.role_arn}"
-    cluster                = "${var.cluster}"
-    target-group-arn       = "${module.load_balancer.alb_target_group}"
-    role                   = "/ecs/${module.public.ecs_lb_role}"
-    container-name         = "${var.service_entrypoint}"
-    compose-file           = "${md5(file(var.service_compose))}"
-    deployment-max-percent = "${var.max_percent}"
-    timeout                = "${var.timeout}"
-
-    #enable for debugging
-    #timestamp = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    # create and start our our ecs service
-    command = <<EOF
-export PUBLIC_URL=${module.load_balancer.alb_dns_name} && \
-ecs-cli compose \
---project-name ${var.service_name} \
---task-role-arn ${module.ecs_policy.role_arn} \
---cluster ${var.cluster} \
---region ${var.aws_region} \
---file ${var.service_compose} \
-service up \
---target-group-arn ${module.load_balancer.alb_target_group} \
---role /ecs/${module.public.ecs_lb_role} \
---container-name ${var.service_entrypoint} \
---container-port ${var.container_port} \
---deployment-max-percent ${var.max_percent} \
---timeout ${var.timeout} 
-EOF
-  }
-}

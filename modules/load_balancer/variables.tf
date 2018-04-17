@@ -46,3 +46,18 @@ variable "allow_cidr_block" {
   default     = "0.0.0.0/0"
   description = "Specify cidr block that is allowed to access the LoadBalancer"
 }
+
+variable "enable_https" {
+  default     = false
+  description = "Specify if this ALB will allow HTTPS"
+}
+
+variable "ssl_cert_arn" {
+  default     = ""
+  description = "If enable_https is true this must be specified"
+}
+
+variable "ssl_policy_name" {
+  default     = "ELBSecurityPolicy-2016-08"
+  description = "The name of the SSL policy for an ALB listener. See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies"
+}

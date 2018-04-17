@@ -226,5 +226,3 @@ variable "health_check_path" {
   default = "/"
   description = "path for load balancer health check"
 }
-
-

@@ -26,13 +26,14 @@ variable "ssh_ip_address" {}
 # Network config
 #--------------------------------------------------------------
 
-variable "public_subnet_count" {
-  description = "Size of the subnet_ids. This needs to be provided because: value of 'count' cannot be computed"
-}
-
 variable "public_subnet_cidrs" {
   description = "List of public cidrs, for every availability zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
   type        = "list"
+}
+
+variable "private_subnet_cidrs" {
+  type = "list"
+  description = "List of private cidrs"
 }
 
 variable "destination_cidr_block" {
@@ -47,6 +48,14 @@ variable "vpc_igw_id" {
 variable "availability_zones" {
   description = "List of availability zones you want. Example: ap-southeast-2a, ap-southeast-2b"
   type        = "list"
+}
+
+variable "enable_nat" {
+  default = false
+}
+
+variable "enable_gateways" {
+  default = false
 }
 
 #--------------------------------------------------------------

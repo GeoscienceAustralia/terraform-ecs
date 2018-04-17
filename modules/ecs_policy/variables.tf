@@ -6,6 +6,10 @@ variable "cluster" {
   description = "The name of the cluster"
 }
 
+variable "name" {
+  description = "The name of the ECS cluster"
+}
+
 variable "owner" {
   description = "mailing list that represents the owner of the service"
 }
@@ -29,4 +33,16 @@ variable "ec2_security_group" {
 
 variable "task_role_name" {
   description = "The name of the role"
+}
+
+variable "parameter_store_resource" {
+  type = "string"
+  default = "*"
+  description = "The parameter store services that can be acccessed. E.g. * for all or /datacube/* for all datacube"
+}
+
+# Dummy variable to emulate a depends_on
+variable depends_on {
+  default = [],
+  type = "list"
 }

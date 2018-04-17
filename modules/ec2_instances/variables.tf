@@ -35,6 +35,19 @@ variable "nat_ids" {
   type        = "list"
 }
 
+variable "nat_instance_ids" {
+  type = "list"
+  description = "List of EC2 NAT instance IDs"
+}
+
+variable "enable_nat" {
+  default = false
+}
+
+variable "enable_gateways" {
+  default = false
+}
+
 #--------------------------------------------------------------
 # EC2 Instance Settings
 #--------------------------------------------------------------
@@ -115,7 +128,26 @@ variable "container_port" {
 }
 
 variable "alb_security_group_id" {
+  type = "list"
   description = "The security group of the alb"
+}
+
+#--------------------------------------------------------------
+# EFS
+#--------------------------------------------------------------
+
+variable "efs_id" {
+  type    = "string"
+  default = "" 
+}
+
+variable "use_efs" {
+  default = true
+}
+
+variable "mount_dir" {
+  default     = "/opt/data"
+  description = "Directory on EC2 where EFS will be mounted."
 }
 
 #--------------------------------------------------------------

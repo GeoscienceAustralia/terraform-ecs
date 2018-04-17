@@ -78,11 +78,6 @@ variable "ecs_logging" {
   default     = "[\"json-file\",\"awslogs\"]"
 }
 
-variable "cloudwatch_prefix" {
-  description = "If you want to avoid cloudwatch collision or you don't want to merge all logs to one log group specify a prefix"
-  default     = ""
-}
-
 #--------------------------------------------------------------
 # Jumpbox
 #--------------------------------------------------------------

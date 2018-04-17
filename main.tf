@@ -93,7 +93,7 @@ module "ec2_instances" {
   min_size          = "${var.min_size}"
   desired_capacity  = "${var.desired_capacity}"
   custom_userdata   = "${var.custom_userdata}"
-  cloudwatch_prefix = "${var.cloudwatch_prefix}"
+  cloudwatch_prefix = "${var.cluster}"
   aws_ami           = "${var.ecs_aws_ami}"
 
   # Networking

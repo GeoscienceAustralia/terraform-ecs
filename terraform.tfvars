@@ -26,4 +26,4 @@ owner = "YOUR EMAIL HERE"
 
 enable_jumpbox = false
 
-key_name = "AWS KEYNAME HERE"
+key_name = "datacube-ecs-dea"

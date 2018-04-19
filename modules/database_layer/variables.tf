@@ -6,13 +6,8 @@
 # Network
 #--------------------------------------------------------------
 
-variable "database_subnet_cidrs" {
-  default     = ["10.0.21.0/24", "10.0.22.0/24", "10.0.23.0/24"]
-  description = "List of subnets to be used for databases"
-}
-
-variable "availability_zones" {
-  type = "list"
+variable "database_subnet_group" {
+  description = "Subnet group for the database"
 }
 
 variable "vpc_id" {}
@@ -136,12 +131,12 @@ variable "jump_ssh_sg_id" {
 #--------------------------------------------------------------
 
 variable "dns_name" {
-  default = "database"
+  default     = "database"
   description = "Database url prefix"
 }
 
 variable "zone" {
-  default = "local"
+  default     = "local"
   description = "Route53 Zone suffix"
 }
 

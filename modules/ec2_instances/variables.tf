@@ -8,20 +8,25 @@ variable "vpc_id" {
 
 variable "aws_region" {
   description = "AWS Region we are running in"
-  default = "ap-southeast-2"
+  default     = "ap-southeast-2"
 }
 
 #--------------------------------------------------------------
 # Network Settings
 #--------------------------------------------------------------
 
-variable "private_subnet_cidrs" {
-  description = "List of private cidrs, for every availability zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
+variable "availability_zones" {
+  description = "List of availability zones you want. Example: ap-southeast-2a, ap-southeast-2b"
   type        = "list"
 }
 
-variable "availability_zones" {
-  description = "List of availability zones you want. Example: ap-southeast-2a, ap-southeast-2b"
+variable "private_subnets" {
+  description = "List of private subnets"
+  type        = "list"
+}
+
+variable "private_route_table_ids" {
+  description = "List of private route table ids"
   type        = "list"
 }
 
@@ -36,7 +41,7 @@ variable "nat_ids" {
 }
 
 variable "nat_instance_ids" {
-  type = "list"
+  type        = "list"
   description = "List of EC2 NAT instance IDs"
 }
 
@@ -128,7 +133,7 @@ variable "container_port" {
 }
 
 variable "alb_security_group_id" {
-  type = "list"
+  type        = "list"
   description = "The security group of the alb"
 }
 
@@ -138,7 +143,7 @@ variable "alb_security_group_id" {
 
 variable "efs_id" {
   type    = "string"
-  default = "" 
+  default = ""
 }
 
 variable "use_efs" {

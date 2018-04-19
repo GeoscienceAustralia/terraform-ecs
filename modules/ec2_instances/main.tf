@@ -73,7 +73,7 @@ resource "aws_autoscaling_group" "asg" {
   desired_capacity     = "${var.desired_capacity}"
   force_delete         = true
   launch_configuration = "${aws_launch_configuration.launch.id}"
-  vpc_zone_identifier  = ["${module.private_subnet.ids}"]
+  vpc_zone_identifier  = ["${var.private_subnets}"]
 
   tag {
     key                 = "Name"
@@ -121,7 +121,7 @@ resource "aws_autoscaling_group" "asg" {
 }
 
 locals {
-  final_user_data =  <<EOF
+  final_user_data = <<EOF
 ${data.template_file.user_data.rendered}
 ${var.use_efs == 1 ? data.template_file.efs_user_data.rendered : ""}
   EOF

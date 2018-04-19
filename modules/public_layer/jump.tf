@@ -18,7 +18,7 @@ resource "aws_instance" "jumpbox" {
     Created_by = "terraform"
   }
 
-  subnet_id                   = "${element(module.public_subnet.ids, 0)}"
+  subnet_id                   = "${element(var.public_subnets, 0)}"
   associate_public_ip_address = true
   vpc_security_group_ids      = ["${aws_security_group.jump_ssh_sg.id}"]
   key_name                    = "${var.key_name}"

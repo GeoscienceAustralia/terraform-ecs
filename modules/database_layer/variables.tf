@@ -58,7 +58,7 @@ variable "db_admin_password" {
 }
 
 variable "rds_is_multi_az" {
-  default = true
+  default = false
 }
 
 variable "backup_retention_period" {

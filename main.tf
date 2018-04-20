@@ -90,6 +90,7 @@ module "database" {
   dns_name          = "${var.db_dns_name}"
   zone              = "${var.db_zone}"
   db_name           = "${var.db_name}"
+  rds_is_multi_az   = "${var.db_multi_az}"
 
   # Tags
   owner     = "${var.owner}"

@@ -124,18 +124,23 @@ variable db_admin_password {
 }
 
 variable "db_dns_name" {
-  default = "database"
+  default     = "database"
   description = "Database url prefix"
 }
 
 variable "db_zone" {
-  default = "local"
+  default     = "local"
   description = "Route53 Zone suffix"
 }
 
 variable "db_name" {
-  default = "postgres"
+  default     = "postgres"
   description = "Name of the first database"
+}
+
+variable "db_multi_az" {
+  default     = false
+  description = "Enable redundancy for the DB"
 }
 
 #--------------------------------------------------------------
@@ -218,6 +223,6 @@ variable "timeout" {
 }
 
 variable "health_check_path" {
-  default = "/"
+  default     = "/"
   description = "path for load balancer health check"
 }

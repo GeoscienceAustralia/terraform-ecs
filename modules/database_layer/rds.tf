@@ -12,7 +12,7 @@ resource "aws_db_instance" "rds" {
   storage_type           = "gp2"
   instance_class         = "${var.instance_class}"
   vpc_security_group_ids = ["${aws_security_group.rds.id}"]
-  db_subnet_group_name   = "${aws_db_subnet_group.rds-subnet.name}"
+  db_subnet_group_name   = "${var.database_subnet_group}"
 
   # Availability
   multi_az = "${var.rds_is_multi_az}"

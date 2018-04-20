@@ -26,13 +26,18 @@ variable "ssh_ip_address" {}
 # Network config
 #--------------------------------------------------------------
 
-variable "public_subnet_cidrs" {
-  description = "List of public cidrs, for every availability zone you want you need one. Example: 10.0.0.0/24 and 10.0.1.0/24"
+variable "public_subnets" {
+  description = "List of public subnets"
+  type        = "list"
+}
+
+variable "public_route_table_ids" {
+  description = "List of route tables assigned to public subnets"
   type        = "list"
 }
 
 variable "private_subnet_cidrs" {
-  type = "list"
+  type        = "list"
   description = "List of private cidrs"
 }
 

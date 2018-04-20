@@ -38,7 +38,7 @@ module "vpc" {
   azs              = "${var.availability_zones}"
   public_subnets   = "${var.public_subnet_cidrs}"
   private_subnets  = "${var.private_subnet_cidrs}"
-  database_subnets = "${var.private_subnet_cidrs}"
+  database_subnets = "${var.database_subnet_cidrs}"
 
   # Use nat instances instead
   enable_nat_gateway           = false

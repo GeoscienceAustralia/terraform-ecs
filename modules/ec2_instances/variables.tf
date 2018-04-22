@@ -35,6 +35,11 @@ variable "destination_cidr_block" {
   default     = "0.0.0.0/0"
 }
 
+variable "allow_cidr_block" {
+  description = "IPs that are allowed to access the alb"
+  default     = "0.0.0.0/0"
+}
+
 variable "nat_ids" {
   description = "List of nat ids"
   type        = "list"
@@ -130,11 +135,6 @@ variable "cloudwatch_prefix" {
 
 variable "container_port" {
   description = "The port that the ecs communicates with the alb"
-}
-
-variable "alb_security_group_id" {
-  type        = "list"
-  description = "The security group of the alb"
 }
 
 #--------------------------------------------------------------

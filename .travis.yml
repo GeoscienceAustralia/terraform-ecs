@@ -1,3 +1,6 @@
+env:
+  AWS_DEFAULT_REGION: 'ap-southeast-2'
+
 branches:
   only: 
     - master
@@ -10,7 +13,7 @@ before_install:
 install:
   # Download and install the latest version of terraform
   - curl -o terraform.zip $(echo "https://releases.hashicorp.com/terraform/$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')/terraform_$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')_linux_amd64.zip")
-  - unzip terraform.zip && mv terraform /usr/local/bin/terraform && chmod +x /usr/local/bin/terraform
+  - unzip terraform.zip && sudo mv terraform /usr/local/bin/terraform
   - terraform -v
 
 script:

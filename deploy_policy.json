@@ -1,0 +1,43 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Resources",
+            "Effect": "Allow",
+            "Action": [
+                "elasticfilesystem:*",
+                "rds:*",
+                "route53domains:ListTagsForDomain",
+                "route53domains:ViewBilling",
+                "route53domains:GetDomainSuggestions",
+                "route53domains:GetContactReachabilityStatus",
+                "route53domains:GetDomainDetail",
+                "route53domains:GetOperationDetail",
+                "route53domains:CheckDomainAvailability",
+                "route53domains:ListDomains",
+                "route53domains:ListOperations",
+                "ecs:*",
+                "route53:*",
+                "ec2:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "TerraformState",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "dynamodb:PutItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:GetItem",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:dynamodb:::table/terraform",
+                "arn:aws:s3:::dea-devs-tfstate",
+                "arn:aws:s3:::dea-devs-tfstate/*"
+            ]
+        }
+    ]
+}

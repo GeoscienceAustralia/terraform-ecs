@@ -9,6 +9,36 @@
 # workspace, cluster name and the instance_group name.
 # That is also the reason why ecs_instances is a seperate module and not everything is created here.
 
+resource "aws_security_group" "alb" {
+  name   = "${var.cluster}_shared_alb_sg"
+  vpc_id = "${var.vpc_id}"
+
+  tags {
+    workspace  = "${var.workspace}"
+    Cluster    = "${var.cluster}"
+    Created_by = "terraform"
+    Owner      = "${var.owner}"
+  }
+}
+
+resource "aws_security_group_rule" "http_from_anywhere" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "TCP"
+  cidr_blocks       = ["${var.allow_cidr_block}"]
+  security_group_id = "${aws_security_group.alb.id}"
+}
+
+resource "aws_security_group_rule" "outbound_internet_access" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = "${aws_security_group.alb.id}"
+}
+
 resource "aws_security_group" "instance" {
   name        = "${var.workspace}_${var.cluster}_${var.instance_group}"
   description = "Used in ${var.workspace}"
@@ -26,7 +56,7 @@ resource "aws_security_group" "instance" {
     from_port       = 32768
     to_port         = 65535
     protocol        = "TCP"
-    security_groups = ["${var.alb_security_group_id}"]
+    security_groups = ["${aws_security_group.alb.id}"]
   }
 
   egress {

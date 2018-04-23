@@ -121,7 +121,6 @@ module "ec2_instances" {
   private_subnets         = "${module.vpc.private_subnets}"
   private_route_table_ids = "${module.vpc.private_route_table_ids}"
   container_port          = "${var.container_port}"
-  alb_security_group_id   = ["${module.load_balancer.alb_security_group_id}"]
 
   # Force dependency wait
   depends_id = "${module.public.nat_complete}"
@@ -132,36 +131,4 @@ module "ec2_instances" {
   workspace = "${var.workspace}"
 
   aws_region = "${var.aws_region}"
-}
-
-module "ecs_policy" {
-  source = "modules/ecs_policy"
-
-  task_role_name = "${var.service_name}-role"
-
-  account_id         = "${data.aws_caller_identity.current.account_id}"
-  aws_region         = "${var.aws_region}"
-  ec2_security_group = "${module.ec2_instances.ecs_instance_security_group_id}"
-  name               = "${var.cluster}"
-
-  # Tags
-  owner     = "${var.owner}"
-  cluster   = "${var.cluster}"
-  workspace = "${var.workspace}"
-}
-
-module "load_balancer" {
-  source = "modules/load_balancer"
-
-  container_port    = "${var.container_port}"
-  service_name      = "${var.service_name}"
-  alb_name          = "${var.cluster}-${var.workspace}"
-  vpc_id            = "${module.vpc.vpc_id}"
-  public_subnet_ids = "${module.vpc.public_subnets}"
-  health_check_path = "${var.health_check_path}"
-
-  # Tags
-  owner     = "${var.owner}"
-  cluster   = "${var.cluster}"
-  workspace = "${var.workspace}"
 }

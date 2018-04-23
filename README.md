@@ -1,5 +1,7 @@
 # AWS ECS
 
+[![Build Status](https://travis-ci.org/GeoscienceAustralia/terraform-ecs.svg?branch=master)](https://travis-ci.org/GeoscienceAustralia/terraform-ecs)
+
 This repository contains the Terraform modules for creating a production ready ECS in AWS.
 
 * [Running this template](#running-this-template)

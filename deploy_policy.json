@@ -2,28 +2,61 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "Resources",
+            "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "elasticfilesystem:*",
+                "iam:CreateInstanceProfile",
+                "iam:UpdateAssumeRolePolicy",
+                "iam:GetPolicyVersion",
                 "rds:*",
                 "route53domains:ListTagsForDomain",
+                "logs:*",
+                "iam:RemoveRoleFromInstanceProfile",
                 "route53domains:ViewBilling",
-                "route53domains:GetDomainSuggestions",
-                "route53domains:GetContactReachabilityStatus",
+                "iam:DeletePolicy",
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
                 "route53domains:GetDomainDetail",
-                "route53domains:GetOperationDetail",
+                "iam:PutRolePolicy",
+                "autoscaling:*",
+                "iam:AddRoleToInstanceProfile",
+                "iam:ListInstanceProfilesForRole",
+                "iam:PassRole",
                 "route53domains:CheckDomainAvailability",
+                "iam:DetachRolePolicy",
                 "route53domains:ListDomains",
+                "kms:*",
+                "iam:DeleteRolePolicy",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListRolePolicies",
+                "iam:CreatePolicyVersion",
+                "elasticfilesystem:*",
+                "iam:DeleteInstanceProfile",
+                "iam:GetRole",
+                "iam:GetInstanceProfile",
+                "iam:GetPolicy",
+                "iam:ListEntitiesForPolicy",
+                "route53domains:GetDomainSuggestions",
+                "iam:ListRoles",
+                "iam:DeleteRole",
+                "elasticloadbalancing:*",
+                "route53domains:GetContactReachabilityStatus",
+                "iam:ListInstanceProfiles",
+                "route53domains:GetOperationDetail",
+                "iam:CreatePolicy",
+                "iam:ListPolicyVersions",
                 "route53domains:ListOperations",
                 "ecs:*",
                 "route53:*",
-                "ec2:*"
+                "ec2:*",
+                "iam:GetRolePolicy",
+                "iam:DeletePolicyVersion",
+                "iam:SetDefaultPolicyVersion"
             ],
             "Resource": "*"
         },
         {
-            "Sid": "TerraformState",
+            "Sid": "VisualEditor1",
             "Effect": "Allow",
             "Action": [
                 "s3:PutObject",
@@ -34,9 +67,9 @@
                 "s3:ListBucket"
             ],
             "Resource": [
-                "arn:aws:dynamodb:::table/terraform",
                 "arn:aws:s3:::dea-devs-tfstate",
-                "arn:aws:s3:::dea-devs-tfstate/*"
+                "arn:aws:s3:::dea-devs-tfstate/*",
+                "arn:aws:dynamodb:*:*:table/terraform"
             ]
         }
     ]

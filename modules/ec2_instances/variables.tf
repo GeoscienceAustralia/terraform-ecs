@@ -83,18 +83,18 @@ variable "instance_type" {
 
 variable "max_size" {
   description = "Maximum size of the nodes in the cluster"
-  default     = 1
+  default     = 6
 }
 
 variable "min_size" {
   description = "Minimum size of the nodes in the cluster"
-  default     = 1
+  default     = 2
 }
 
 #For more explenation see http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html
 variable "desired_capacity" {
   description = "The desired capacity of the cluster"
-  default     = 1
+  default     = 2
 }
 
 variable "instance_group" {
@@ -104,6 +104,30 @@ variable "instance_group" {
 
 variable "depends_id" {
   description = "Workaround to wait for the NAT gateway to finish before starting the instances"
+}
+
+#--------------------------------------------------------------
+# ECS Cluster Settings
+#--------------------------------------------------------------
+
+variable "max_container_cpu" {
+  default     = 1024
+  description = "Largest CPU requirements of any task"
+}
+
+variable "max_container_mem" {
+  default     = 768
+  description = "Largest memory requirements of any task"
+}
+
+variable "min_container_num" {
+  default     = 1
+  description = "Minimum number of containers that can be scheduled"
+}
+
+variable "max_container_num" {
+  default     = 8
+  description = "Maximum number of containers that can be scheduled"
 }
 
 #--------------------------------------------------------------

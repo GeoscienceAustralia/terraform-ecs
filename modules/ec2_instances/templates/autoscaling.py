@@ -1,4 +1,5 @@
 import boto3
+import os
 
 ecs = boto3.client('ecs')
 cw = boto3.client('cloudwatch')
@@ -12,7 +13,7 @@ CONTAINER_MAX_CPU = os.environ.get('CONTAINER_MAX_CPU', _CONTAINER_MAX_CPU)
 CONTAINER_MAX_MEM = os.environ.get('CONTAINER_MAX_MEM', _CONTAINER_MAX_MEM)
 CLUSTER = os.environ.get('CLUSTER', _CLUSTER)
 
-def lambda_handler(event, context):
+def handler(event, context):
     """
     Check CPU and Memory availability for each instance in the cluster
     Report to cloudwatch the number of containers we can schedule

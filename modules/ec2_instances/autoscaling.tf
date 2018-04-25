@@ -32,7 +32,7 @@ resource "aws_lambda_function" "new_lambda_function" {
 # Scale out the cluster if we can no longer add containers
 
 resource "aws_cloudwatch_metric_alarm" "scale_out" {
-  alarm_name          = "SchedulableContainersLowAlert"
+  alarm_name          = "${var.cluster}SchedulableContainersLowAlert"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "SchedulableContainers"
@@ -50,7 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_out" {
 }
 
 resource "aws_autoscaling_policy" "scale_out" {
-  name                   = "foobar3-terraform-test"
+  name                   = "${var.cluster}ScaleOut"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
@@ -60,7 +60,7 @@ resource "aws_autoscaling_policy" "scale_out" {
 # Scale in the cluster if we can add too many containers (overprovisioned)
 
 resource "aws_cloudwatch_metric_alarm" "scale_in" {
-  alarm_name          = "SchedulableContainersHighAlert"
+  alarm_name          = "${var.cluster}SchedulableContainersHighAlert"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "SchedulableContainers"
@@ -78,7 +78,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_in" {
 }
 
 resource "aws_autoscaling_policy" "scale_in" {
-  name                   = "foobar3-terraform-test"
+  name                   = "${var.cluster}ScaleIn"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
@@ -88,7 +88,7 @@ resource "aws_autoscaling_policy" "scale_in" {
 # Lambda Policies
 
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "orchestration.lambda.schedulable_containers"
+  name = "${var.cluster}.lambda.schedulable_containers"
 
   assume_role_policy = <<EOF
 {
@@ -107,12 +107,14 @@ resource "aws_iam_role" "lambda_exec_role" {
 EOF
 }
 
-data "aws_iam_policy_document" "metrics" {
+data "aws_iam_policy_document" "schedulable_containers" {
   statement {
     sid = "1"
 
     actions = [
       "cloudwatch:PutMetricData",
+      "ecs:ListContainerInstances",
+      "ecs:DescribeContainerInstances",
     ]
 
     resources = [
@@ -121,10 +123,10 @@ data "aws_iam_policy_document" "metrics" {
   }
 }
 
-resource "aws_iam_policy" "metrics" {
-  name   = "CloudWatchPutMetricData"
+resource "aws_iam_policy" "schedulable_containers" {
+  name   = "${var.cluster}LambdaScheduleableContainers"
   path   = "/"
-  policy = "${data.aws_iam_policy_document.metrics.json}"
+  policy = "${data.aws_iam_policy_document.schedulable_containers.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "attach-lambda-execution-policy" {
@@ -134,5 +136,5 @@ resource "aws_iam_role_policy_attachment" "attach-lambda-execution-policy" {
 
 resource "aws_iam_role_policy_attachment" "attach-lambda-metric-policy" {
   role       = "${aws_iam_role.lambda_exec_role.name}"
-  policy_arn = "${aws_iam_policy.metrics.arn}"
+  policy_arn = "${aws_iam_policy.schedulable_containers.arn}"
 }

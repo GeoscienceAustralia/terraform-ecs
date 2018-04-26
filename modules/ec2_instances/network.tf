@@ -17,9 +17,3 @@ resource "aws_route" "private_nat_instance_route" {
   destination_cidr_block = "${var.destination_cidr_block}"
   instance_id            = "${element(var.nat_instance_ids, count.index)}"
 }
-
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id          = "${var.vpc_id}"
-  service_name    = "com.amazonaws.ap-southeast-2.s3"
-  route_table_ids = ["${var.private_route_table_ids}"]
-}

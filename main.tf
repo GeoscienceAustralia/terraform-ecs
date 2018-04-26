@@ -43,6 +43,7 @@ module "vpc" {
   # Use nat instances instead
   enable_nat_gateway           = false
   create_database_subnet_group = true
+  enable_s3_endpoint           = true
 
   tags = {
     workspace  = "${var.workspace}"

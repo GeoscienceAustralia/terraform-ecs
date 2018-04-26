@@ -130,6 +130,11 @@ variable "max_container_num" {
   description = "Maximum number of containers that can be scheduled"
 }
 
+variable "autoscaling_evaluation_time" {
+  default     = 5
+  description = "Time in minutes to check the cluster for rightsizing"
+}
+
 #--------------------------------------------------------------
 # SSH settings
 #--------------------------------------------------------------

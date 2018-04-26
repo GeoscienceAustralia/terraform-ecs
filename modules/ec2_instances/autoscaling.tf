@@ -12,7 +12,7 @@ data "archive_file" "lambda" {
   output_path = "${path.module}/templates/autoscaling.zip"
 }
 
-resource "aws_lambda_function" "new_lambda_function" {
+resource "aws_lambda_function" "schedulable_containers" {
   function_name    = "${var.cluster}_schedulable_containers"
   handler          = "autoscaling.handler"
   runtime          = "python3.6"
@@ -27,6 +27,27 @@ resource "aws_lambda_function" "new_lambda_function" {
       container_max_mem = "${var.max_container_mem}"
     }
   }
+}
+
+# Cloudwatch to trigger the lambda
+resource "aws_cloudwatch_event_rule" "schedule" {
+  name                = "invoke-${var.cluster}-schedulable-containers"
+  description         = "Fires every ${var.autoscaling_evaluation_time} minutes"
+  schedule_expression = "rate(${var.autoscaling_evaluation_time} minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "lambda_execution" {
+  rule      = "${aws_cloudwatch_event_rule.schedule.name}"
+  target_id = "${var.cluster}_schedulable_containers"
+  arn       = "${aws_lambda_function.schedulable_containers.arn}"
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.schedulable_containers.function_name}"
+  principal     = "events.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_event_rule.schedule.arn}"
 }
 
 # Scale out the cluster if we can no longer add containers

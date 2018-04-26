@@ -93,6 +93,7 @@ module "database" {
   zone              = "${var.db_zone}"
   db_name           = "${var.db_name}"
   rds_is_multi_az   = "${var.db_multi_az}"
+  ssm_prefix        = "${var.cluster}"
 
   # Tags
   owner     = "${var.owner}"

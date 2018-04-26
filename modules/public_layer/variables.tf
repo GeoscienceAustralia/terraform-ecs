@@ -41,6 +41,11 @@ variable "private_subnet_cidrs" {
   description = "List of private cidrs"
 }
 
+variable "private_route_table_ids" {
+  description = "List of route tables assigned to private subnets"
+  type        = "list"
+}
+
 variable "destination_cidr_block" {
   description = "Specify all traffic to be routed either through Internet Gateway or NAT to access the internet"
   default     = "0.0.0.0/0"

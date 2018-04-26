@@ -56,18 +56,20 @@ module "public" {
   source = "modules/public_layer"
 
   # Networking
-  vpc_id                 = "${module.vpc.vpc_id}"
-  vpc_igw_id             = "${module.vpc.igw_id}"
-  availability_zones     = "${var.availability_zones}"
-  public_subnets         = "${module.vpc.public_subnets}"
-  public_route_table_ids = "${module.vpc.public_route_table_ids}"
-  private_subnet_cidrs   = "${var.private_subnet_cidrs}"
+  vpc_id                  = "${module.vpc.vpc_id}"
+  vpc_igw_id              = "${module.vpc.igw_id}"
+  availability_zones      = "${var.availability_zones}"
+  public_subnets          = "${module.vpc.public_subnets}"
+  public_route_table_ids  = "${module.vpc.public_route_table_ids}"
+  private_subnet_cidrs    = "${var.private_subnet_cidrs}"
+  private_route_table_ids = "${module.vpc.private_route_table_ids}"
 
   # Jumpbox
   ssh_ip_address = "${var.ssh_ip_address}"
   key_name       = "${var.key_name}"
   jumpbox_ami    = "${data.aws_ami.jumpbox_ami.image_id}"
   enable_jumpbox = "${var.enable_jumpbox}"
+  enable_nat     = true
 
   # Tags
   owner     = "${var.owner}"

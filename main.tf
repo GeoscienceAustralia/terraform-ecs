@@ -113,7 +113,7 @@ module "ec2_instances" {
   desired_capacity  = "${var.desired_capacity}"
   custom_userdata   = "${var.custom_userdata}"
   cloudwatch_prefix = "${var.cluster}"
-  aws_ami           = "${var.ecs_aws_ami}"
+  aws_ami           = "${data.aws_ami.node_ami.image_id}"
 
   # Networking
   vpc_id                  = "${module.vpc.vpc_id}"

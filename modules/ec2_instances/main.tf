@@ -79,7 +79,7 @@ resource "aws_security_group" "instance" {
 # Default disk size for Docker is 22 gig, see http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
 resource "aws_launch_configuration" "launch" {
   name_prefix          = "${var.workspace}_${var.cluster}_${var.instance_group}_"
-  image_id             = "${var.aws_ami}"
+  image_id             = "${data.aws_ami.node_ami.image_id}"
   instance_type        = "${var.instance_type}"
   security_groups      = ["${aws_security_group.instance.id}"]
   user_data            = "${local.final_user_data}"
@@ -97,7 +97,7 @@ resource "aws_launch_configuration" "launch" {
 # Instances are scaled across availability zones http://docs.aws.amazon.com/autoscaling/latest/userguide/auto-scaling-benefits.html 
 # Do not use the load_balancers parameters here as it will overwrite service lbs from registering with the asg
 resource "aws_autoscaling_group" "asg" {
-  name                 = "${var.workspace}_${var.cluster}_${var.instance_group}"
+  name                 = "${aws_launch_configuration.launch.name}"
   max_size             = "${var.max_size}"
   min_size             = "${var.min_size}"
   desired_capacity     = "${var.desired_capacity}"
@@ -147,6 +147,10 @@ resource "aws_autoscaling_group" "asg" {
     key                 = "Created_by"
     value               = "terraform"
     propagate_at_launch = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 

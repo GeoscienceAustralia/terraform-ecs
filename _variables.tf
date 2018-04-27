@@ -48,10 +48,6 @@ variable "instance_type" {
   description = "AWS instance type to use"
 }
 
-variable "ecs_aws_ami" {
-  description = "The AWS ami id to use for ECS"
-}
-
 variable "max_size" {
   description = "Maximum size of the nodes in the cluster"
 }
@@ -147,22 +143,23 @@ variable "db_multi_az" {
 # Server Images
 #--------------------------------------------------------------
 
-# Use this if you want to customise your jumpbox server image
+data "aws_ami" "node_ami" {
+  most_recent = true
 
-# data "aws_ami" "jumpbox_ami" {
-#   most_recent = true
-#   owners      = ["self"]
-#
-#   filter {
-#     name   = "tag:application"
-#     values = ["Jumpbox"]
-#   }
-#
-#   filter {
-#     name   = "tag:version"
-#     values = ["${var.workspace}"]
-#   }
-# }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "name"
+    values = ["amzn-ami-*-amazon-ecs-optimized"]
+  }
+
+  owners = ["amazon"]
+}
+
+# Use this if you want to customise your jumpbox server image
 
 data "aws_ami" "jumpbox_ami" {
   most_recent = true

@@ -79,7 +79,7 @@ resource "aws_security_group" "instance" {
 # Default disk size for Docker is 22 gig, see http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
 resource "aws_launch_configuration" "launch" {
   name_prefix          = "${var.workspace}_${var.cluster}_${var.instance_group}_"
-  image_id             = "${data.aws_ami.node_ami.image_id}"
+  image_id             = "${var.aws_ami}"
   instance_type        = "${var.instance_type}"
   security_groups      = ["${aws_security_group.instance.id}"]
   user_data            = "${local.final_user_data}"

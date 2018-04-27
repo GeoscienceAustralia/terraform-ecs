@@ -20,8 +20,6 @@ desired_capacity = 2
 
 instance_type = "t2.small"
 
-ecs_aws_ami = "ami-c1a6bda2"
-
 owner = "YOUR EMAIL HERE"
 
 enable_jumpbox = false

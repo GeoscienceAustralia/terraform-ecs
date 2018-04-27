@@ -101,17 +101,17 @@ variable "ssm_dbname_ref" {
 
 variable "ssm_adminuser_ref" {
   description = "The reference for the admin username in the ssm"
-  default     = "admin_username"
+  default     = "db_username"
 }
 
 variable "ssm_adminpassword_ref" {
   description = "The reference for the admin password in the ssm"
-  default     = "admin_password"
+  default     = "db_password"
 }
 
 variable "ssm_rdshost_ref" {
   description = "The reference for the rds host name in the ssm"
-  default     = "host"
+  default     = "db_host"
 }
 
 #--------------------------------------------------------------

@@ -11,7 +11,8 @@ yum install -y awslogs jq aws-cli nfs-utils
 ${ecs_config}
 {
   echo "ECS_CLUSTER=${cluster_name}"
-  echo "ECS_AVAILABLE_LOGGING_DRIVERS=${ecs_logging}"
+  # Has to be single quote because we're injecting double quotes
+  echo 'ECS_AVAILABLE_LOGGING_DRIVERS=${ecs_logging}'
 } >> /etc/ecs/ecs.config
 
 # Inject the CloudWatch Logs configuration file contents

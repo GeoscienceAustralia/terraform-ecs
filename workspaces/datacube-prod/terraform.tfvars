@@ -1,8 +1,8 @@
 vpc_cidr = "10.0.0.0/16"
 
-cluster_name = "test-ecs"
+cluster_name = "datacube-prod"
 
-workspace = "dev"
+workspace = "datacube-prod"
 
 public_subnet_cidrs = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
 
@@ -25,3 +25,5 @@ owner = "YOUR EMAIL HERE"
 enable_jumpbox = false
 
 key_name = "datacube-ecs-dea"
+
+db_multi_az = true

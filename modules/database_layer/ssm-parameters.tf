@@ -35,7 +35,7 @@ resource "aws_ssm_parameter" "rds_admin_password" {
 
 resource "aws_ssm_parameter" "rds_host" {
   name      = "${var.ssm_prefix}.${var.ssm_rdshost_ref}"
-  value     = "${aws_db_instance.rds.endpoint}"
+  value     = "${aws_db_instance.rds.address}"
   type      = "String"
   overwrite = "${var.ssm_overwrite}"
 

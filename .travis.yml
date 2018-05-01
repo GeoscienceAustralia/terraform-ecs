@@ -20,7 +20,6 @@ env:
  - WORKSPACE=datacube-prod
 
 script:
-  - cd infrastructure
   - terraform init -backend-config workspaces/$WORKSPACE/backend.cfg
   - terraform workspace new $WORKSPACE || terraform workspace select $WORKSPACE
   - terraform plan -input=false -var-file="workspaces/$WORKSPACE/terraform.tfvars"

@@ -22,7 +22,7 @@ instance_type = "t2.small"
 
 owner = "YOUR EMAIL HERE"
 
-enable_jumpbox = false
+enable_jumpbox = true
 
 key_name = "datacube-ecs-dea"
 

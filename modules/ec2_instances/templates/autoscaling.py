@@ -11,8 +11,8 @@ _CONTAINER_MAX_CPU = 1024
 _CONTAINER_MAX_MEM = 768
 _CLUSTER = 'default'
 # Override with Environment Vars if available
-CONTAINER_MAX_CPU = os.environ.get('CONTAINER_MAX_CPU', _CONTAINER_MAX_CPU)
-CONTAINER_MAX_MEM = os.environ.get('CONTAINER_MAX_MEM', _CONTAINER_MAX_MEM)
+CONTAINER_MAX_CPU = int(os.environ.get('CONTAINER_MAX_CPU', _CONTAINER_MAX_CPU))
+CONTAINER_MAX_MEM = int(os.environ.get('CONTAINER_MAX_MEM', _CONTAINER_MAX_MEM))
 CLUSTER = os.environ.get('CLUSTER', _CLUSTER)
 
 def handler(event, context):

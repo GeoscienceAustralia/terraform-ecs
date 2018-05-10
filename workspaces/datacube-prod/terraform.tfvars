@@ -18,7 +18,7 @@ min_size = 1
 
 desired_capacity = 2
 
-instance_type = "t2.small"
+instance_type = "m5.large"
 
 owner = "YOUR EMAIL HERE"
 

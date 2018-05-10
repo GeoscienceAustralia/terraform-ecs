@@ -23,8 +23,9 @@ resource "aws_lambda_function" "schedulable_containers" {
 
   environment {
     variables = {
-      container_max_cpu = "${var.max_container_cpu}"
-      container_max_mem = "${var.max_container_mem}"
+      CONTAINER_MAX_CPU = "${var.max_container_cpu}"
+      CONTAINER_MAX_MEM = "${var.max_container_mem}"
+      CLUSTER           = "${var.cluster}"
     }
   }
 }
@@ -63,7 +64,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_out" {
   threshold           = "${var.min_container_num}"
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.asg.name}"
+    ClusterName = "${var.cluster}"
   }
 
   alarm_description = "Alarm if less than min container can be scheduled"
@@ -91,7 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_in" {
   threshold           = "${var.max_container_num}"
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.asg.name}"
+    ClusterName = "${var.cluster}"
   }
 
   alarm_description = "Alarm if more than max containers can be scheduled"

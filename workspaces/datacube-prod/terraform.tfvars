@@ -12,13 +12,13 @@ database_subnet_cidrs = ["10.0.20.0/24", "10.0.21.0/24", "10.0.22.0/24"]
 
 availability_zones = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
 
-max_size = 3
+max_size = 4
 
 min_size = 1
 
-desired_capacity = 2
+desired_capacity = 3
 
-instance_type = "m5.large"
+instance_type = "m5.xlarge"
 
 owner = "YOUR EMAIL HERE"
 

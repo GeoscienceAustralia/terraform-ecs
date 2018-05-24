@@ -116,7 +116,7 @@ variable "max_container_cpu" {
 }
 
 variable "max_container_mem" {
-  default     = 768
+  default     = 2048
   description = "Largest memory requirements of any task"
 }
 

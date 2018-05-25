@@ -1,26 +1,24 @@
 env:
-  AWS_DEFAULT_REGION: 'ap-southeast-2'
-
+- WORKSPACE=datacube-prod
 branches:
-  only: 
-    - master
-
+  only:
+  - master
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq unzip jq
-  - sudo pip install awscli
-
+- sudo apt-get update -qq
+- sudo apt-get install -qq unzip jq
+- sudo pip install awscli
 install:
-  # Download and install the latest version of terraform
-  - curl -o terraform.zip $(echo "https://releases.hashicorp.com/terraform/$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')/terraform_$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')_linux_amd64.zip")
-  - unzip terraform.zip && sudo mv terraform /usr/local/bin/terraform
-  - terraform -v
-
-env:
- - WORKSPACE=datacube-prod
-
+- curl -o terraform.zip $(echo "https://releases.hashicorp.com/terraform/$(curl -s
+  https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')/terraform_$(curl
+  -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')_linux_amd64.zip")
+- unzip terraform.zip && sudo mv terraform /usr/local/bin/terraform
+- terraform -v
 script:
-  - terraform init -backend-config workspaces/$WORKSPACE/backend.cfg
-  - terraform workspace new $WORKSPACE || terraform workspace select $WORKSPACE
-  - terraform plan -input=false -var-file="workspaces/$WORKSPACE/terraform.tfvars"
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then terraform apply -auto-approve -var-file="workspaces/$WORKSPACE/terraform.tfvars" -input=false; fi'
+- terraform init -backend-config workspaces/$WORKSPACE/backend.cfg
+- terraform workspace new $WORKSPACE || terraform workspace select $WORKSPACE
+- terraform plan -input=false -var-file="workspaces/$WORKSPACE/terraform.tfvars"
+- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then terraform apply -auto-approve -var-file="workspaces/$WORKSPACE/terraform.tfvars"
+  -input=false; fi
+notifications:
+  slack:
+    secure: va5Ft0gk1botBMShzqM65MlF3nuFIjQNIzcUKFXMzQKTplPcWV+RXR4dUaCdnxxe24fHWQ6RNL9g472kc8A5aprD/rTtCAfPguyG2h5yY+XMF+LRqixweYFzSBydGPc7uq6KGRpyqOlwq3rF2O9XuSl48J5tI33kYA6vSNqxA0Qj8Y6KkDyatdUc4NyCb3zWL8M1/Wx3PO/sNOXQOrJACLFezSiH2dKRoPGX8jjmPyX7EqjPuoBpSyFyji0yhgYFRB1doapkfIiZv4q/e0uPEhi/TRwte9UrEMJ3jzB/P3g2j8TshgcPk5xAUQSNTgBNn416pbi+XAyrRNPpc70D94RrS1oyk7zOzigRZwB26Rj/H3UdwNS2HWDwTN83OQ1RUGB4tJSa2UTY1xkFXsE6rvVBx0jZhMDJm9m0WLRTQ4mMhnQZ4TBAJdGtPUiGYLjII7fI2TjHgiRCfJzcNvowhfB47XLsZysfF2YEFidVrWoYTKAOdjSHOID5eExTNngeRaN2VnZSkuwuFiQhqpoCEKRrkRcWDhloXk+2IlLHhzXwsPjBvnnr46S8ch6S5eUS/Kvszea4hapFV6WVyJVcXjOZe6GL5NyxdHLHV/aXev2xLF5EWC4zQEz5Bx7trwq2i0Q1NYPBY4vfBctcTnfxTvZgspZpFLQ1qGNZYa9vTmY=

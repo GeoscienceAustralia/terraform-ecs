@@ -2,6 +2,8 @@ vpc_cidr = "10.0.0.0/16"
 
 cluster = "datacube-dev"
 
+state_bucket = "ga-aws-dea-dev-tfstate"
+
 workspace = "datacube-dev"
 
 public_subnet_cidrs = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]

@@ -17,3 +17,10 @@ resource "aws_ssm_parameter" "ssl_cert_region" {
   type      = "String"
   overwrite = true
 }
+
+resource "aws_ssm_parameter" "state_bucket" {
+  name      = "${var.cluster}.state_bucket"
+  value     = "${var.state_bucket}"
+  type      = "String"
+  overwrite = true
+}

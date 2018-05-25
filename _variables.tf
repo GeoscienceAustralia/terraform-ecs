@@ -2,6 +2,10 @@ variable "aws_region" {
   default = "ap-southeast-2"
 }
 
+variable "state_bucket" {
+  description = "The s3 bucket used to store terraform state"
+}
+
 #--------------------------------------------------------------
 # Networking
 #--------------------------------------------------------------

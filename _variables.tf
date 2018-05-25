@@ -30,6 +30,19 @@ variable "availability_zones" {
   type        = "list"
 }
 
+# ==================
+# DNS and HTTPS
+
+variable "dns_zone" {
+  default     = ""
+  description = "DNS zone of the service, you will also need a wildcard cert for this domain"
+}
+
+variable "ssl_cert_region" {
+  default     = "ap-southeast-2"
+  description = "The region the certificates exist in"
+}
+
 #--------------------------------------------------------------
 # EC2 Configuration
 #--------------------------------------------------------------

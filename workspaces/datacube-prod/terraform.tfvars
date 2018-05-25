@@ -27,3 +27,7 @@ enable_jumpbox = true
 key_name = "datacube-ecs-dea"
 
 db_multi_az = true
+
+dns_zone = "dea.ga.gov.au"
+
+ssl_cert_region = "ap-southeast-2"

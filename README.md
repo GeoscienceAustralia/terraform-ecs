@@ -28,15 +28,18 @@ This repository contains the Terraform modules for creating a production ready E
 * ecs-cli > 1.0.0 (bda91d5)
 
 ## Running this template
-
+* Configure Dependencies
+  * As this cluster is used to host webservices, you will need a route53 hosted zone
+  * You will also need an Amazon Certificate Manager issued wildcard certificate for the hosted zone. 
 * In order to use the jumpbox in this repo you will require a Jumpbox AMI in your amazon region
   * The jumpbox AMI is identified through ownership by the same account tagged with:
     * "application" = "Jumpbox"
     * "version" = "{{workspace}}" (dev/test/prod)
-  * Setting environment variables to be injected into the script
-    * ```TF_VAR_ssh_ip_address``` will restrict ssh access to the jumpbox to this ip address if the jumpbox is enabled
-    * ```TF_db_admin_username``` will set the admin username of the rds to this variable
-    * ```TF_db_admin_password``` will set the admin password of the rds to this variable
+* Setting environment variables to be injected into the script
+  * ```TF_VAR_ssh_ip_address``` will restrict ssh access to the jumpbox to this ip address if the jumpbox is enabled
+  * ```TF_db_admin_username``` will set the admin username of the rds to this variable
+  * ```TF_db_admin_password``` will set the admin password of the rds to this variable
+
 
 
 ## What is ECS

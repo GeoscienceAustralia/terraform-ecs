@@ -27,3 +27,7 @@ enable_jumpbox = true
 key_name = "datacube-dev"
 
 db_multi_az = false
+
+dns_zone = "wms.gadevs.ga"
+
+ssl_cert_region = "ap-southeast-2"

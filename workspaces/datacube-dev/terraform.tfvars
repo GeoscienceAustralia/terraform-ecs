@@ -33,3 +33,5 @@ db_multi_az = false
 dns_zone = "wms.gadevs.ga"
 
 ssl_cert_region = "ap-southeast-2"
+
+config_root = "https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/"

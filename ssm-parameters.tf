@@ -24,3 +24,10 @@ resource "aws_ssm_parameter" "state_bucket" {
   type      = "String"
   overwrite = true
 }
+
+resource "aws_ssm_parameter" "config_root" {
+  name      = "${var.cluster}.config_root"
+  value     = "${var.config_root}"
+  type      = "String"
+  overwrite = true
+}

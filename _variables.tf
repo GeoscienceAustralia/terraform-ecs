@@ -240,3 +240,8 @@ variable "health_check_path" {
   default     = "/"
   description = "path for load balancer health check"
 }
+
+variable "config_root" {
+  default     = "https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/prod/"
+  description = "The default path to look for config files"
+}

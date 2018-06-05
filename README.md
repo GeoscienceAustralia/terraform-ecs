@@ -2,83 +2,123 @@
 
 [![Build Status](https://travis-ci.org/GeoscienceAustralia/terraform-ecs.svg?branch=master)](https://travis-ci.org/GeoscienceAustralia/terraform-ecs)
 
-This repository contains the Terraform modules for creating a production ready ECS in AWS.
+This repository contains the Terraform modules for creating a production ready ECS cluster in AWS. This repository is designed to be used with [datacube-ecs](https://github.com/opendatacube/datacube-ecs) to define ECS tasks.
 
-* [Running this template](#running-this-template)
-* [What is ECS?](#what-is-ecs)
-* [ECS infrastructure in AWS](#ecs-infra)
-* [ECS Terraform module](#terraform-module)
-* [How to create the infrastructure](#create-it)
-* [ECS Deployment](deployment/README.md)
-* [Things you should know](#must-know)
-  * [SSH access to the instances](#ssh-access-to-the-instances)
-  * [ECS configuration](#ecs-configuration)
+* [Requirements](#requirements)
+  * [Local System Requirements](#local-system-requirements)
+  * [AWS Environment Requirements](#aws-environment-requirements)
+* [Config](#config)
+  * [Backend Config](#backend-config)
+  * [Terraform Variables](#terraform-variables)
+* [Create It](#Create-it)
+* [Information](#information)
+  * [What is ECS](#what-is-ecs)
+  * [ECS Infrastructure](#ecs-infrastructure)
+  * [Terraform Module](#terraform-module)
+  * [SSH Access to the Instances](#ssh-access-to-the-instances)
   * [Logging](#logging)
-  * [ECS instances](#ecs-instances)
-  * [LoadBalancer](#loadbalancer)
-  * [Using 'default'](#using-default)
-  * [ECS deployment strategies](#ecs-deployment-strategies)
-  * [System containers & custom boot commands](#system-containers-and-custom-boot-commands)
   * [EC2 node security and updates](#ec2-node-security-and-updates)
-  * [Service discovery](#service-discovery)
-  * [ECS detect deployments failure](#ecs-detect-deployments-failure)
+* License(#license)
+* Contacts(#contacts)
 
-## Local system Requirements
+## Requirements
+
+### Local system Requirements
 * terraform > v0.10.0
 * ecs-cli > 1.0.0 (bda91d5)
+* awslogs (recommended)
 
-## Running this template
-* Configure Dependencies
-  * As this cluster is used to host webservices, you will need a route53 hosted zone
-  * You will also need an Amazon Certificate Manager issued wildcard certificate for the hosted zone. 
-* In order to use the jumpbox in this repo you will require a Jumpbox AMI in your amazon region
-  * The jumpbox AMI is identified through ownership by the same account tagged with:
-    * "application" = "Jumpbox"
-    * "version" = "{{workspace}}" (dev/test/prod)
-* Setting environment variables to be injected into the script
+### AWS Environment requirements
+* A Public Route53 hosted zone, that will be used as the default endpoint for our apps
+* An Amazon Certificate Manager generated wildcard certificate for the default hosted zone
+* An S3 bucket to store infrastructure state
+* A DynamoDB table with the primary key name: `LockID` - This is used to lock changes to the state ensuring only one person can deploy at once.
+* An SSH KeyPair to be used to access the servers
+
+## Config
+To separate the config for your clusters your should create a new folder in the workspaces folder for each cluster.
+This folder should include: 
+* backend.cfg
+* terraform.tfvars
+
+### Backend Config
+To enable separation between dev and prod infrastructure we utilise workspaces. Workspaces required a backend.cfg file to identify the backend config for each cluster. This has been designed to enable a multi account workflow separating dev and prod.
+
+```
+bucket="ga-aws-dea-dev-tfstate"
+key = "datacube-dev/terraform.tfstate"
+region = "ap-southeast-2"
+dynamodb_table = "terraform"
+```
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| bucket | The S3 bucket to be used to store terraform state files | string | `` | yes |
+| key | The path of the statefile within the bucket | string | `` | yes |
+| region | The region of the bucket | string | `` | yes |
+| dynamodb_table | A DynamoDB table with the primary key : LockID, used to lock modifications to the statefile | string | `` | yes |
+
+### Terraform Variables
+
+The cluster requires a number of variables to be defined in the `terraform.tfvars` file, these variables are defined below
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| vpc_cidr | IP range used by the Virtual Private Cloud in CIDR format | string | `10.0.0.0/16` | yes |
+| cluster | Cluster name used to seperate resources from other clusters in the same account | string | `` | yes |
+| state_bucket | The S3 bucket that is used to store Terraform state, stored as in paramater store to enable ecs tasks to run terraform | string | `` | yes |
+| workspace | Used to seperate infrastructure, should match the workspace folder | string | `` | yes |
+| public_subnet_cidrs | List of IP Ranges in CIDR format, must be within vpc_cidr range | List | `` | yes |
+| private_subnet_cidrs | List of IP Ranges in CIDR format, must be within vpc_cidr range | List | `` | yes |
+| database_subnet_cidrs | List of IP Ranges in CIDR format, must be within vpc_cidr range | List | `` | yes |
+| availability_zones | List of AZs to create resources in | List | `` | yes |
+| max_size | Max number of worker nodes | number | `` | yes |
+| min_size | Min number of worker nodes, should be at least 2 for High Availability | number | `` | yes |
+| desired_capacity | Default number of worker nodes to start the cluster with, this will be changed dynamically | number | `` | yes |
+| instance_type | The type of instance to run as a worker node  | string | `` | yes |
+| owner | A team name to tag on all resources | string | `` | yes |
+| enable_jumpbox | If a bastion/jumpbox should be created | boolean | `` | yes |
+| key_name | The ssh keypair to associate with the jumpbox and worker nodes | string | `` | yes |
+| db_multi_az | Should the Database be created in multiple AZs (Higher Availability), or not (cheaper) | boolean | `` | yes |
+| dns_zone | The default DNS zone to associate with the cluster, apps will be given the dns name app.{dns_zone} | boolean | `` | yes |
+| dns_zone | The region your *.{dns_zone} cert was issued in | string | `` | yes |
+| config_root | A variable to be stored in paramater store, enables apps to find cluster specific config | string | `` | yes |
+
+
+## Create it
+* Set secrets as environment variables to be injected into the script
   * ```TF_VAR_ssh_ip_address``` will restrict ssh access to the jumpbox to this ip address if the jumpbox is enabled
   * ```TF_db_admin_username``` will set the admin username of the rds to this variable
   * ```TF_db_admin_password``` will set the admin password of the rds to this variable
+* Deploy your workspace: `./deploy.sh workspace-name` e.g. `./deploy.sh datacube-dev`
 
-
-
-## What is ECS
+## Information
+### What is ECS
 
 ECS stands for EC2 Container Service and is the AWS platform for running Docker containers.
 The full documentation about ECS can be found [here](https://aws.amazon.com/ecs/), the development guide can be found [here](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html). A more fun read can be found at [The Hitchhiker's Guide to AWS ECS and Docker](http://start.jcolemorrison.com/the-hitchhikers-guide-to-aws-ecs-and-docker/)
 
-To understand ECS it is good to state the obvious differences against the competitors like [Kubernetes](https://kubernetes.io/) or [DC/OS Mesos](https://docs.mesosphere.com/). The mayor differences are that ECS can not be run on-prem and that it lacks advanced features. These two differences can either been seen as weakness or as strengths.
+To understand ECS it is good to state the obvious differences against the competitors like [Kubernetes](https://kubernetes.io/) or [DC/OS Mesos](https://docs.mesosphere.com/). The major differences are that ECS can not be run on-prem and that it lacks advanced features. These two differences can either been seen as weakness or as strengths.
 
-### AWS specific
+### ECS infrastructure
 
-You can not run ECS on-prem because it is an AWS service and not installable software. This makes it easier to setup and maintain than hosting your own Kubernetes or Mesos on-prem or in the cloud. Although it is a service it's not the same as [Google hosted Kubernetes](https://cloud.google.com/container-engine/). Why? Google really offers Kubernetes as a SAAS. Meaning, you don't manage any infrastructure while ECS actually requires slaves and therefore infrastructure.
-
-The difference between running your own Kubernetes or Mesos and ECS is the lack of maintenance of the master nodes on ECS. You are only responsible for allowing the EC2 nodes to connect to ECS and ECS does the rest. This makes the ECS slave nodes replaceable and allows for low maintenance by using the standard AWS ECS optimized OS and other building blocks like autoscale etc..
-
-### Advanced features
-
-Although it misses some advanced features ECS plays well with other AWS services to provide simple but powerful deployments. This makes the learning curve less high for DevOps teams to run their own infrastructure. You could argue that if you are trying to do complex stuff in ECS you are either making it unnecessary complex or ECS does not fit your needs.
-
-Having said that ECS does have a possibility to be used like a Kubernetes or Mesos by using [Blox](https://blox.github.io/). Blox is essentially a set of tools that give you more control of the cluster and even more advanced deployment strategies.
-
-## ECS infra
-
-As stated above ECS needs EC2 nodes that are being used as slaves to run Docker containers on. To do so you need infrastructure for this. Here is an ECS production-ready infrastructure diagram.
+As stated above ECS needs EC2 worker nodes to run Docker containers on. To do so you need infrastructure for this. This repository will create the following infrastructure.
 
 ![ECS infra](img/ecs-infra.png)
 
 What are we creating:
 
 * VPC with a /16 ip address range and an internet gateway
-* We are choosing a region and a number of availability zones we want to use. For high-availability we need at least two
-* In every availability zone we are creating a private and a public subnet with a /24 ip address range
+* We are choosing a region and a number of availability zones we want to use. default of three for HA
+* In every availability zone we are creating a private, public and database subnet with a /24 ip address range
   * Public subnet convention is 10.x.0.x and 10.x.1.x etc..
-  * Private subnet convention is 10.x.50.x and 10.x.51.x etc..
-* In the public subnet we place a NAT gateway the LoadBalancer is added here for each service we add to the cluster
-* The private subnets are used in the autoscale group which places instances in them
-* We create an ECS cluster where the instances connect to
+  * Private subnet convention is 10.x.10.x and 10.x.11.x etc..
+  * Private subnet convention is 10.x.20.x and 10.x.21.x etc..
+* In the public subnet we place either NAT instances or a Nat Gateway. Nat instances are the default as they are cheaper for high throughput applications.
+* We create an Autoscaling group to host our ECS worker nodes
+* We create an ECS cluster that the worker nodes connect to
 
-## Terraform module
+### Terraform module
 
 To be able to create the stated infrastructure we are using Terraform. To allow everyone to use the infrastructure code, this repository contains the code as Terraform modules so it can be easily used by others.
 
@@ -90,124 +130,20 @@ Modules need to be used to create infrastructure. For an example on how to use t
 
 **Note:** You need to use Terraform version 0.10.0 and above
 
-### Conventions
-
-These are the conventions we have in every module
-
-* Contains main.tf where all the terraform code is
-* If main.tf is too big we create more *.tf files with proper names
-* [Optional] Contains outputs.tf with the output parameters
-* [Optional] Contains variables.tf which sets required attributes
-* For grouping in AWS we set the tag "Workspace" everywhere where possible
-
-### Module structure
-
-![Terraform module structure](img/ecs-terraform-modules.png)
-
-## Create it
-
-To create a working ECS cluster from this repository see **main.tf** and **terraform.tfvars**.
-
-Quick way to create this from the repository as is:
-
-```bash
-terraform init && terraform apply 
-```
-
-Actual way for creating everything using the default terraform flow:
-
-```bash
-terraform init
-terraform plan
-terraform apply
-```
-
-## Must know
 
 ### SSH access to the instances
 
-You should not put your ECS instances directly on the internet. You should not allow SSH access to the instances directly but use a bastion server for that. Having SSH access to the acceptance workspace is fine but you should not allow SSH access to production instances. You don't want to make any manual changes in the production workspace.
-
-This ECS module allows you to use an AWS SSH key to be able to access the instances, for quick usage purposes the ecs.tf creates a new AWS SSH key. The private key can be found in the root of this repository with the name 'ecs_fake_private'
-
-For a new method see issue [#1](https://github.com/arminc/terraform-ecs/issues/1)
-
-### ECS configuration
-
-ECS is configured using the */etc/ecs/ecs.config* file as you can see [here](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html). There are two important configurations in this file. One is the ECS cluster name so that it can connect to the cluster, this should be specified from terraform because you want this to be variable. The other one is access to Docker Hub to be able to access private repositories. To do this safely use an S3 bucket that contains the Docker Hub configuration. See the *ecs_config* variable in the *ecs_instances* module for an example.
+You should not put your ECS instances directly on the internet. You should not allow SSH access to the instances directly but use a bastion/jumpbox server for that. Having SSH access to the dev workspace is fine but you should not allow SSH access to production instances. You don't want to make any manual changes in the production workspace.
 
 ### Logging
 
-All the default system logs like Docker or ECS agent should go to CloudWatch as configured in this repository. The ECS container logs can be pushed to CloudWatch as well but it is better to push these logs to a service like [ElasticSearch](https://www.elastic.co/cloud). CloudWatch does support search and alerts but with ElasticSearch or other log services you can use more advanced search and grouping. See issue [#5](https://github.com/arminc/terraform-ecs/issues/5)
-
-The [ECS configuration](#ecs-configuration) as described here allows configuration of additional [Docker log drivers](https://docs.docker.com/engine/admin/logging/overview/) to be configured. For example fluentd as shown in the *ecs_logging* variable in the *ecs_instances* module.
-
-Be aware when creating two clusters in one AWS account on CloudWatch log group collision, [read the info](modules/ecs_instances/cloudwatch.tf).
-
-### ECS instances
-
-Normally there is only one group of instances like configured in this repository. But it is possible to use the *ecs_instances* module to add more groups of different type of instances that can be used for different deployments. This makes it possible to have multiple different types of instances with different scaling options.
-
-### LoadBalancer
-
-It is possible to use the Application LoadBalancer and the Classic LoadBalancer with this setup. The default configuration is Application LoadBalancer because that makes more sense in combination with ECS. 
-
-This is deployed as part of the services component, which is a seperate repo for a one-to-many relationship. [terraform ecs service repo](https://github.com/GeoscienceAustralia/terraform-ecs-service)
-
-### Using default
-
-The philosophy is that the modules should provide as much as possible of sane defaults. That way when using the modules it is possible to quickly configure them but still change when needed. That is also why we introduced something like a name 'default' as the default value for some of the components. Another reason behind it is that you don't need to come up with names when you probably might only have one cluster in your workspace.
-
-Looking at [ecs.tf](ecs.tf) might give you a different impression, but there we configure more things than needed to show it can be done.
-
-### ECS deployment strategies
-
-ECS has a lot of different ways to deploy or place a task in the cluster. You can have different placement strategies like random and binpack, see here for full [documentation](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html). Besides the placement strategies, it is also possible to specify constraints, as described [here](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html). The constraints allow for a more fine-grained placement of tasks on specific EC2 nodes, like *instance type* or custom attributes.
-
-What ECS does not have is a possibility to run a task on every EC2 node on boot, that's where [System containers and custom boot commands](#system-containers-and-custom-boot-commands) comes into place.
-
-### System containers and custom boot commands
-
-In some cases, it is necessary to have a system 'service' running that does a particular task, like gathering metrics. It is possible to add an OS specific service when booting an EC2 node but that means you are not portable. A better option is to have the 'service' run in a container and run the container as a 'service', also called a System container.
-
-ECS has different [deployment strategies](#ecs-deployment-strategies) but it does not have an option to run a system container on every EC2 node on boot. It is possible to do this via ECS workaround or via Docker.
-
-#### ECS workaround
-
-The ECS workaround is described here [Running an Amazon ECS Task on Every Instance](https://aws.amazon.com/blogs/compute/running-an-amazon-ecs-task-on-every-instance/). It basically means use a Task definition and a custom boot script to start and register the task in ECS. This is awesome because it allows you to see the system container running in ECS console. The bad thing about it is that it does not restart the container when it crashes. It is possible to create a Lambda to listen to changes/exits of the system container and act on it. For example, start it again on the same EC2 node. See issue [#2](https://github.com/arminc/terraform-ecs/issues/2)
-
-#### Docker
-
-It is also possible to do the same thing by just running a docker run command on EC2 node on boot. To make sure the container keeps running we tell docker to restart the container on exit. The great thing about this method is that it is simple and you can use the 'errors' that can be caught in CloudWatch to alert when something bad happens.
-
-**Note:** Both of these methods have one big flaw and that is that you need to change the launch configuration and restart every EC2 node one by one to apply the changes. Most of the time this does not have to be a problem because the system containers don't change that often but is still an issue. It is possible to fix this in a better way with [Blox](https://blox.github.io/), but this also introduces more complexity. So it is a choice between simplicity and an explicit update flow or advanced usage with more complexity.
-
-Regardless which method you pick you will need to add a custom command on EC2 node on boot. This is already available in the module *ecs_instances* by using the *custom_userdata* variable. An example for Docker would look like this:
-
-```bash
-docker run \
-  --name=cadvisor \
-  --detach=true \
-  --publish 9200:8080 \
-  --publish=8080:8080 \
-  --memory="300m" \
-  --privileged=true \
-  --restart=always \
-  --volume=/:/rootfs:ro \
-  --volume=/cgroup:/cgroup:ro \
-  --volume=/var/run:/var/run:rw \
-  --volume=/sys:/sys:ro \
-  --volume=/var/lib/docker:/var/lib/docker:ro \
-  --log-driver=awslogs \
-  --log-opt=awslogs-region=eu-west-1 \
-  --log-opt=awslogs-group=cadvisor \
-  --log-opt=awslogs-stream=${cluster_name}/$container_instance_id \
-  google/cadvisor:v0.24.1
-```
+All ECS logs are pushed to cloudfront, we recommend using awslogs to monitor your logs, it can be installed using pythons' pip `pip install awslogs`
 
 ### EC2 node security and updates
 
 Because the EC2 nodes are created by us it means we need to make sure they are up to date and secure. It is possible to create an own AMI with your own OS, Docker, ECS agent and everything else. But it is much easier to use the [ECS optimized AMIs](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html) which are maintained by AWS with a secure AWS Linux, regular security patches, recommended versions of ECS agent, Docker and more...
+
+This cluster is configured to pull the latest version of the ECS AMI, running it on a schedule will ensure your worker nodes are semi-regularly updated.
 
 To know when to update your EC2 node you can subscribe to AWS ECS AMI updates, like described [here](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS-AMI-SubscribeTopic.html). Note: We can not create a sample module for this because terraform does not support email protocol on SNS.
 
@@ -219,23 +155,6 @@ Double the size of your cluster and your applications and when everything is up 
 
 The best option is to drain the containers from an ECS instance like described [here](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-instance-draining.html). Then you can terminate the instance without disrupting your application users. This can be done by doubling the EC2 nodes instances in your cluster or just by one and doing this slowly one by one. Currently, there is no automated/scripted way to do this. See issue [#3](https://github.com/arminc/terraform-ecs/issues/3)
 
-### Service discovery
-
-ECS allows the use of [ALB and ELB](deployment/README.md#alb-vs-elb) facing [Internally or Externally](deployment/README.md#internal-vs-external) which allows for a simple but very effective service discovery. If you encounter the need to use external tools like consul etc... then you should ask yourself the question: Am I not making it to complex?
-
-Kubernetes and Mesos act like a big cluster where they encourage you to deploy all kinds of things on it. ECS can do the same but it makes sense to group your applications to domains or logical groups and create separate ECS clusters for them. This can be easily done because you are not paying for the master nodes. You can still be in the same AWS account and the same VPC but on a separate cluster with separate instances.
-
-### ECS detect deployments failure
-
-When deploying manually we can see if the new container has started or is stuck in a start/stop loop. But when deploying automatically this is not visible. To make sure we get alerted when containers start failing we need to watch for events from ECS who state that a container has STOPPED. This can be done by using the module [ecs_events](modules/ecs_events/main.tf). The only thing that is missing from the module is the actual alert. This is because terraform can't handle email and all other protocols for *aws_sns_topic_subscription* are specific per customer.
-
-## Troubleshooting issues
-```
-* aws_cloudwatch_log_group.docker: Creating CloudWatch Log Group failed: ResourceAlreadyExistsException: The specified log group already exists
-	status code: 400, request id: 8cc36c45-cd73-11e7-836f-9d4db602d5fa:  The CloudWatch Log Group '/var/log/docker' already exists.
-* module.ec2_instances.aws_cloudwatch_log_group.messages: 1 error(s) occurred:
-```
-Add cloudwatch_prefix = "test-ecs-dev"
 
 ## License
 This code is licensed under the MIT license. See the [license deed](LICENSE) for more details.

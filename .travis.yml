@@ -1,5 +1,5 @@
 env:
-- WORKSPACE=datacube-prod
+- WORKSPACE=datacube-dev
 branches:
   only:
   - master

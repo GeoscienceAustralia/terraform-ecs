@@ -30,6 +30,8 @@ key_name = "datacube-ecs-dea"
 
 db_multi_az = true
 
+enable_efs = true
+
 dns_zone = "dea.ga.gov.au"
 
 ssl_cert_region = "ap-southeast-2"

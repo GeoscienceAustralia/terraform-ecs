@@ -20,7 +20,7 @@ min_size = 1
 
 desired_capacity = 4
 
-instance_type = "r4.8xlarge"
+instance_type = "r4.4xlarge"
 
 owner = "deacepticons"
 

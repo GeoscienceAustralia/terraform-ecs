@@ -14,13 +14,17 @@ database_subnet_cidrs = ["10.0.20.0/24", "10.0.21.0/24", "10.0.22.0/24"]
 
 availability_zones = ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"]
 
-max_size = 10
+max_size = 6
+
+max_container_num = 30
 
 min_size = 1
 
+min_container_num = 4
+
 desired_capacity = 4
 
-instance_type = "r4.2xlarge"
+instance_type = "r4.4xlarge"
 
 owner = "deacepticons"
 

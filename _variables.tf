@@ -81,7 +81,29 @@ variable "instance_group" {
   description = "The name of the instances that you consider as a group"
   default     = "default"
 }
+#--------------------------------------------------------------
+# ECS Cluster Settings
+#--------------------------------------------------------------
 
+variable "max_container_cpu" {
+  default     = 1024
+  description = "Largest CPU requirements of any task"
+}
+
+variable "max_container_mem" {
+  default     = 2048
+  description = "Largest memory requirements of any task"
+}
+
+variable "min_container_num" {
+  default     = 1
+  description = "Minimum number of containers that can be scheduled"
+}
+
+variable "max_container_num" {
+  default     = 8
+  description = "Maximum number of containers that can be scheduled"
+}
 #--------------------------------------------------------------
 # EC2 Logging
 #--------------------------------------------------------------

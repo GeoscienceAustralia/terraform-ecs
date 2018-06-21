@@ -125,8 +125,15 @@ module "ec2_instances" {
   private_subnets         = "${module.vpc.private_subnets}"
   private_route_table_ids = "${module.vpc.private_route_table_ids}"
   container_port          = "${var.container_port}"
+
+  max_container_cpu       = "${var.max_container_cpu}"
+  max_container_mem       = "${var.max_container_mem}"
+  min_container_num       = "${var.min_container_num}"
+  max_container_num       = "${var.max_container_num}"
+
   use_efs                 = "${var.enable_efs}"
   efs_id                  = "${module.efs.efs_id}"
+
 
   # Force dependency wait
   depends_id = "${module.public.nat_complete}"

@@ -1,3 +1,3 @@
 output "efs_id" {
-  value = "${aws_efs_file_system.efs.id}"
+  value = "${element(concat(aws_efs_file_system.efs.*.id, list("")), 0)}"
 }

@@ -267,3 +267,12 @@ variable "config_root" {
   default     = "https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/prod/"
   description = "The default path to look for config files"
 }
+
+#--------------------------------------------------------------
+# EFS
+#--------------------------------------------------------------
+
+variable "enable_efs" {
+  default     = false
+  description = "Enable EFS for this stack"
+}

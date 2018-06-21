@@ -5,6 +5,7 @@
 # Elastic File System to host application files
 
 resource "aws_efs_file_system" "efs" {
+  count = "${var.enable}"
   tags {
     Name      = "${var.cluster}_${var.workspace}_efs"
     owner     = "${var.owner}"
@@ -16,13 +17,14 @@ resource "aws_efs_file_system" "efs" {
 # Mount targets will require the private subnet info
 # from the ec2 module in order to connect to them
 resource "aws_efs_mount_target" "efs_mount_target" {
-  count           = "${length(var.availability_zones)}"
-  file_system_id  = "${aws_efs_file_system.efs.id}"
+  count           = "${var.enable ? length(var.availability_zones) : 0}"
+  file_system_id  = "${aws_efs_file_system.efs.0.id}"
   subnet_id       = "${element(var.private_subnet_ids, count.index)}"
   security_groups = ["${aws_security_group.mount_target_sg.id}"]
 }
 
 resource "aws_security_group" "mount_target_sg" {
+  count       = "${var.enable}"
   name        = "${var.cluster}_${var.workspace}_inbound_nfs"
   description = "Allow NFS (EFS) access inbound"
   vpc_id      = "${var.vpc_id}"
